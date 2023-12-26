@@ -1,3 +1,56 @@
-[gd_scene format=3 uid="uid://bkyc8vouh3s4n"]
+[gd_scene load_steps=8 format=3 uid="uid://bkyc8vouh3s4n"]
+
+[ext_resource type="Texture2D" uid="uid://dqcv0a0xxjvsl" path="res://Down.png" id="1_hegwf"]
+[ext_resource type="Texture2D" uid="uid://cysgbpdmpbqen" path="res://Left.png" id="2_axdsw"]
+[ext_resource type="Texture2D" uid="uid://coj7c6utqvwe8" path="res://Right.png" id="3_eq806"]
+[ext_resource type="Texture2D" uid="uid://du06bobseafn7" path="res://Up.png" id="4_0s0qk"]
+[ext_resource type="Script" path="res://AnimatedSprite2D.cs" id="5_esk7r"]
+[ext_resource type="Script" path="res://CharacterBody2D.cs" id="6_xvxtl"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_g7y3r"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_hegwf")
+}],
+"loop": true,
+"name": &"Down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_axdsw")
+}],
+"loop": true,
+"name": &"Left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_eq806")
+}],
+"loop": true,
+"name": &"Right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_0s0qk")
+}],
+"loop": true,
+"name": &"Up",
+"speed": 5.0
+}]
 
 [node name="Node2D" type="Node2D"]
+
+[node name="Tower" type="Area2D" parent="."]
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Tower"]
+sprite_frames = SubResource("SpriteFrames_g7y3r")
+animation = &"Up"
+script = ExtResource("5_esk7r")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="Tower"]
+script = ExtResource("6_xvxtl")
