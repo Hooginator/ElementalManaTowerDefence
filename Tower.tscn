@@ -48,6 +48,7 @@ animations = [{
 metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Tower"]
+scale = Vector2(0.306, 0.3)
 sprite_frames = SubResource("SpriteFrames_g7y3r")
 animation = &"Up"
 script = ExtResource("5_esk7r")
