@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class Projectile : Node2D
 {
@@ -8,6 +9,7 @@ public partial class Projectile : Node2D
 	private float _speed = 2f;
 	private int i = 0;
 	private int _lifetime = 200;
+	private int _damage = 1;
 	private static int latest_id = 0;
 	private int _id;
 
@@ -18,6 +20,14 @@ public partial class Projectile : Node2D
 		_id = latest_id;
 					latest_id +=1;
 	}
+	private void _on_area_entered(EnemyAndEnemyAccessories e)
+{
+	e.TakeDamage(_damage);
+	// Replace with function body.
+	GD.Print("Projectile area entered");
+			QueueFree();
+}
+
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
@@ -26,10 +36,6 @@ public partial class Projectile : Node2D
 		Position += _direction * _speed;
 
 		i++;
-		if(i%80 == 0){
-			GD.Print($"PROJECTIILE {_id} : {_direction} , {_speed}    {Position}"); 
-
-		}
 		if(i > _lifetime){
 			QueueFree();
 		}
@@ -57,3 +63,6 @@ public partial class Projectile : Node2D
 		_speed = s;
 	}
 }
+
+
+

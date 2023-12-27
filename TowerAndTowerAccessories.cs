@@ -7,7 +7,7 @@ public partial class TowerAndTowerAccessories : Node2D
 	public override void _Ready()
 	{
 		// Set starting location
-		Position = new Vector2(400,400);
+		//Position = new Vector2(400,400);
 
 	}
 

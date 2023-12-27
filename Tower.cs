@@ -13,7 +13,7 @@ public partial class Tower : Area2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_root = GetNode<TowerAndTowerAccessories>("/root/TowerAndTowerAccessories");
+		_root = GetParent<TowerAndTowerAccessories>();
 		boolet = GD.Load<PackedScene>("res://Projectile.tscn");
 	}
 	public Vector2 _target = new Vector2(0, 0);
@@ -40,7 +40,6 @@ public partial class Tower : Area2D
 			projectile2.SetDirection(new Vector2(Mathf.Sin(Rotation), -Mathf.Cos(Rotation)));
 			projectile2.SetLifetime(100);
 			projectile2.SetSpeed(5f);
-		GD.Print($"one in 8000!!! : {_target}  {_root.Position}"); 
 		}
 		i++;
 		var vec = GetViewport().GetMousePosition();
