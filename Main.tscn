@@ -1,9 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://c016updkh5517"]
+[gd_scene load_steps=5 format=3 uid="uid://c016updkh5517"]
 
+[ext_resource type="Script" path="res://Main.cs" id="1_4llic"]
 [ext_resource type="PackedScene" uid="uid://bkyc8vouh3s4n" path="res://Tower.tscn" id="1_lx2tr"]
-[ext_resource type="PackedScene" uid="uid://brtmnkgy7k1iy" path="res://Enemy.tscn" id="2_2luny"]
+[ext_resource type="Script" path="res://WaveManager.cs" id="3_va8b1"]
+[ext_resource type="Script" path="res://BuildingManager.cs" id="5_ujom6"]
 
 [node name="Main" type="Node2D"]
+script = ExtResource("1_4llic")
 
 [node name="TowerAndTowerAccessories" parent="." instance=ExtResource("1_lx2tr")]
 position = Vector2(233, 297)
@@ -11,5 +14,8 @@ position = Vector2(233, 297)
 [node name="TowerAndTowerAccessories2" parent="." instance=ExtResource("1_lx2tr")]
 position = Vector2(823, 305)
 
-[node name="Node2D" parent="." instance=ExtResource("2_2luny")]
-position = Vector2(462, 299)
+[node name="WaveManager" type="Node2D" parent="."]
+script = ExtResource("3_va8b1")
+
+[node name="BuildingManager" type="Node2D" parent="."]
+script = ExtResource("5_ujom6")

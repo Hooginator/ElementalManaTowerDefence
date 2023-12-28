@@ -23,6 +23,7 @@ public partial class Tower : Area2D
 	int i = 0;
 	private float _rotationTarget = 1;
 	private float _rotationDirection = 0;
+	private float _range = 500f; // I don't think its pixels..
 	[Export]
 	public float RotationSpeed { get; set; } = 1.5f;
 
@@ -42,10 +43,13 @@ public partial class Tower : Area2D
 			projectile2.SetSpeed(5f);
 		}
 		i++;
-		var vec = GetViewport().GetMousePosition();
+		// var vec = GetViewport().GetMousePosition();
+		var vec = GetNode<WaveManager>("/root/Main/WaveManager").GetClosest(_root.Position);
 		
+		var diff = vec - _root.Position;
+		GD.Print("l:: " + diff.Length());
 		// Update target
-		if(vec != _target){
+		if(vec != _target && diff.Length() <= _range){
 			UpdateTarget(vec);
 		}
 		
