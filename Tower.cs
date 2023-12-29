@@ -9,11 +9,13 @@ public partial class Tower : Area2D
 
 
 	private TowerAndTowerAccessories _root;
+	private TowerAnimation _animations;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		_root = GetParent<TowerAndTowerAccessories>();
+		_animations = GetNode<TowerAnimation>("TowerAnimation");
 		boolet = GD.Load<PackedScene>("res://Projectile.tscn");
 	}
 	public Vector2 _target = new Vector2(0, 0);
@@ -38,7 +40,7 @@ public partial class Tower : Area2D
 			_root.AddChild(projectile);
 			var projectile2 = projectile.GetNode<Projectile>(".");
 			projectile2.Position = new Vector2(0,0);
-			projectile2.SetDirection(new Vector2(Mathf.Sin(Rotation), -Mathf.Cos(Rotation)));
+			projectile2.SetDirection(new Vector2(Mathf.Sin(_animations.Rotation), -Mathf.Cos(_animations.Rotation)));
 			projectile2.SetLifetime(100);
 			projectile2.SetSpeed(5f);
 		}
@@ -54,7 +56,7 @@ public partial class Tower : Area2D
 		}
 		
 		// Rotatte tower
-		Rotation += _rotationDirection * Mathf.Min(RotationSpeed * (float)delta, Mathf.Abs(Rotation - _rotationTarget));
+		_animations.Rotation += _rotationDirection * Mathf.Min(RotationSpeed * (float)delta, Mathf.Abs(_animations.Rotation - _rotationTarget));
 
 
 	}
@@ -63,7 +65,7 @@ public partial class Tower : Area2D
 		_target = v;
 		v =  SetLengthVector2(v- _root.Position);
 		var angle = GetAngleFromVector2(v);
-		SetRotationDirection(angle, Rotation);
+		SetRotationDirection(angle, _animations.Rotation);
 		SetRotationTarget(angle);
 		EmitSignal(SignalName.TargetChanged, angle);
 	}

@@ -1,45 +1,30 @@
-[gd_scene load_steps=9 format=3 uid="uid://bkyc8vouh3s4n"]
+[gd_scene load_steps=8 format=3 uid="uid://bkyc8vouh3s4n"]
 
 [ext_resource type="Script" path="res://Tower.cs" id="1_4nnsm"]
 [ext_resource type="Script" path="res://TowerAndTowerAccessories.cs" id="1_8prc8"]
-[ext_resource type="Texture2D" uid="uid://dqcv0a0xxjvsl" path="res://Down.png" id="1_hegwf"]
-[ext_resource type="Texture2D" uid="uid://cysgbpdmpbqen" path="res://Left.png" id="2_axdsw"]
-[ext_resource type="Texture2D" uid="uid://coj7c6utqvwe8" path="res://Right.png" id="3_eq806"]
-[ext_resource type="Texture2D" uid="uid://du06bobseafn7" path="res://Up.png" id="4_0s0qk"]
+[ext_resource type="Texture2D" uid="uid://b4lc4vdfpjsbb" path="res://Images/Base1.png" id="3_ua2bk"]
+[ext_resource type="Texture2D" uid="uid://rydluykm07ws" path="res://Images/Gun1.png" id="4_kil0o"]
 [ext_resource type="Script" path="res://TowerAnimation.cs" id="5_esk7r"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_p4uql"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_ua2bk")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_g7y3r"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_hegwf")
+"texture": ExtResource("4_kil0o")
 }],
 "loop": true,
-"name": &"Down",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("2_axdsw")
-}],
-"loop": true,
-"name": &"Left",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("3_eq806")
-}],
-"loop": true,
-"name": &"Right",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("4_0s0qk")
-}],
-"loop": true,
-"name": &"Up",
+"name": &"Gun",
 "speed": 5.0
 }]
 
@@ -50,10 +35,14 @@ script = ExtResource("1_8prc8")
 script = ExtResource("1_4nnsm")
 metadata/_edit_group_ = true
 
+[node name="TowerBase" type="AnimatedSprite2D" parent="Tower"]
+scale = Vector2(0.295, 0.295)
+sprite_frames = SubResource("SpriteFrames_p4uql")
+
 [node name="TowerAnimation" type="AnimatedSprite2D" parent="Tower"]
 scale = Vector2(0.306, 0.3)
 sprite_frames = SubResource("SpriteFrames_g7y3r")
-animation = &"Up"
+animation = &"Gun"
 script = ExtResource("5_esk7r")
 
 [connection signal="TargetChanged" from="Tower" to="Tower/TowerAnimation" method="_on_tower_target_changed"]
