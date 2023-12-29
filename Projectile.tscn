@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://c7gd8li2ppbun"]
 
-[ext_resource type="Script" path="res://Projectile.cs" id="1_r4iln"]
-[ext_resource type="Texture2D" uid="uid://dyrgbvmf1qtem" path="res://icon.svg" id="2_fqgsn"]
+[ext_resource type="Script" path="res://Scripts/Projectile.cs" id="1_r4iln"]
+[ext_resource type="Texture2D" uid="uid://dyrgbvmf1qtem" path="res://Images/icon.svg" id="2_fqgsn"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lgye3"]
 radius = 5.0

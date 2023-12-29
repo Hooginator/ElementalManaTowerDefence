@@ -1,0 +1,78 @@
+[gd_scene load_steps=4 format=3 uid="uid://ckpigbn3k6l42"]
+
+[ext_resource type="Script" path="res://LivesCount.cs" id="1_3gjmf"]
+[ext_resource type="Script" path="res://GameUserInterface.cs" id="1_kln6c"]
+[ext_resource type="Script" path="res://GameOverMenu.cs" id="3_0vbsp"]
+
+[node name="GameUserInterface" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kln6c")
+
+[node name="LivesText" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 1046.0
+offset_top = 6.0
+offset_right = 1089.0
+offset_bottom = 44.0
+text = "Lives"
+
+[node name="LivesCount" type="RichTextLabel" parent="."]
+offset_left = 1102.0
+offset_top = 7.0
+offset_right = 1145.0
+offset_bottom = 45.0
+text = "999"
+script = ExtResource("1_3gjmf")
+
+[node name="GoldText" type="RichTextLabel" parent="."]
+offset_left = 916.0
+offset_top = 5.0
+offset_right = 959.0
+offset_bottom = 43.0
+text = "Gold
+"
+
+[node name="GoldCount" type="RichTextLabel" parent="."]
+offset_left = 972.0
+offset_top = 6.0
+offset_right = 1015.0
+offset_bottom = 44.0
+text = "000"
+script = ExtResource("1_3gjmf")
+
+[node name="GameOverMenu" type="Node2D" parent="."]
+script = ExtResource("3_0vbsp")
+
+[node name="RetryText" type="RichTextLabel" parent="GameOverMenu"]
+offset_left = 188.0
+offset_top = 299.0
+offset_right = 414.0
+offset_bottom = 386.0
+bbcode_enabled = true
+text = "[font_size=48]RETRY[/font_size]"
+
+[node name="Retry" type="Button" parent="GameOverMenu"]
+offset_left = 106.0
+offset_top = 267.0
+offset_right = 446.0
+offset_bottom = 404.0
+
+[node name="QuitText" type="RichTextLabel" parent="GameOverMenu"]
+offset_left = 757.0
+offset_top = 304.0
+offset_right = 988.0
+offset_bottom = 386.0
+bbcode_enabled = true
+text = "[font_size=48]QUIT[/font_size]"
+tab_size = 24
+
+[node name="Quit" type="Button" parent="GameOverMenu"]
+offset_left = 617.0
+offset_top = 265.0
+offset_right = 1012.0
+offset_bottom = 412.0

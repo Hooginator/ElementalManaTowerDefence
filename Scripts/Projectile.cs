@@ -7,11 +7,12 @@ public partial class Projectile : Node2D
 
 	private Vector2 _direction = new Vector2(1,0);
 	private float _speed = 2f;
-	private int i = 0;
+	private float i = 0f;
 	private int _lifetime = 200;
 	private int _damage = 1;
 	private static int latest_id = 0;
 	private int _id;
+	float time_factor = 1f;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -33,9 +34,9 @@ public partial class Projectile : Node2D
 	public override void _Process(double delta)
 	{
 		// GD.Print($"PROJECTIILE!!! : {_direction} , {_speed}    {Position}"); 
-		Position += _direction * _speed;
+		Position += _direction * _speed * time_factor;
 
-		i++;
+		i+= time_factor;
 		if(i > _lifetime){
 			QueueFree();
 		}
@@ -61,6 +62,10 @@ public partial class Projectile : Node2D
 	}
 	public void SetSpeed(float s){
 		_speed = s;
+	}
+
+	public void SetTimeFactor(float t){
+		time_factor = t;
 	}
 }
 

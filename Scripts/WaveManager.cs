@@ -6,30 +6,35 @@ public partial class WaveManager : Node2D
 {
 	private List<EnemyAndEnemyAccessories> enemy_list = new List<EnemyAndEnemyAccessories>();
 	public PackedScene enemy { get; set; }
+	float time_factor = 1f;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		enemy = GD.Load<PackedScene>("res://Enemy.tscn");
-		StartWave();
+		_Main = GetParent<Main>();
+		_Main.TimeFactorUpdate += (float t) => SetTimeFactor(t);
+		
 	}
-	int i=0;
+	float i=0f;
 	int creep_remaining = 0;
 	bool is_wave_happening = false;
 	int _wave_number = 0;
+	private Main _Main;
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 				// Summon a creep
-		if(i%150 == 0 && is_wave_happening){
+		if(i/150 > 1 && is_wave_happening){
 			if(creep_remaining > 0){
 			SummonCreep();
 			creep_remaining -= 1;
 			}else{
 				EndWave();
 			}
+			i = 0;
 		}
-		i++;
+		i+=time_factor;
 	}
 
 	private async void EndWave(){
@@ -39,7 +44,11 @@ public partial class WaveManager : Node2D
 		StartWave();
 
 	}
-	private void StartWave(){
+	public void Restart(){
+		_wave_number = 0;
+		StartWave();
+	}
+	public void StartWave(){
 		creep_remaining = 20;
 		is_wave_happening = true;
 		_wave_number+=1;
@@ -53,6 +62,11 @@ public partial class WaveManager : Node2D
 			creep2.SetLevel(_wave_number);
 			creep2.Position = new Vector2(0,0);
 			enemy_list.Add(creep2);
+
+			creep2.CreepDied += () => _Main.CreepDied();
+			creep2.CreepReachedEnd += () => _Main.CreepReachedEnd();
+			creep2.SetTimeFactor(time_factor);
+			_Main.TimeFactorUpdate += (float t) => creep2.SetTimeFactor(t);
 
 	}
 
@@ -77,5 +91,16 @@ public partial class WaveManager : Node2D
 			enemy_list.Remove(e);
 		}
 		return to_return;
+	}
+
+	
+	public void SetTimeFactor(float t){
+		time_factor = t;
+	}
+	public void DestroyAll(){
+		foreach(var e in enemy_list){
+			e.QueueFree();
+		}
+		enemy_list.Clear();
 	}
 }

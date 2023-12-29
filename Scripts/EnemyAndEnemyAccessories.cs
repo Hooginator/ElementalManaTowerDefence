@@ -11,14 +11,18 @@ public partial class EnemyAndEnemyAccessories : Node2D
 	private float _speed = 1f;
 	private List<Vector2> waypoints = new List<Vector2>(){new Vector2(300, 300), new Vector2(300, 600), new Vector2(600, 600), new Vector2(600, 300)};
 	private int _waypoint_index = 0;
+	float time_factor = 1f;
 	
 	[Signal]
 	public delegate void CreepReachedEndEventHandler();
+	[Signal]
+	public delegate void CreepDiedEventHandler();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		_current_health =_max_health;
+		CreepDied += () => GD.Print("Hello!");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -26,12 +30,12 @@ public partial class EnemyAndEnemyAccessories : Node2D
 	{
 		Vector2 raw = waypoints[_waypoint_index] - Position;
 		Vector2 direction = Tower.SetLengthVector2(raw, 1);
-		Vector2 v_delta =  direction * _speed;
+		Vector2 v_delta =  direction * _speed * time_factor;
 
 		Position += v_delta;
 
 		// Next in queue
-		if(Mathf.Abs(raw[0]) + Mathf.Abs(raw[1]) < _speed *2){
+		if(Mathf.Abs(raw[0]) + Mathf.Abs(raw[1]) < _speed * time_factor *2){
 			_waypoint_index = (_waypoint_index +1)%waypoints.Count;
 			if(_waypoint_index == 0){
 				GD.Print("Reached end point");
@@ -47,6 +51,7 @@ public partial class EnemyAndEnemyAccessories : Node2D
 		_current_health -= a;
 		if(_current_health < 0){
 			GD.Print("DEAD");
+				EmitSignal (SignalName.CreepDied);
 			QueueFree();
 		}
 	}
@@ -54,6 +59,11 @@ public partial class EnemyAndEnemyAccessories : Node2D
 	public void SetLevel(int l){
 		_max_health = 1 + l;
 		_current_health = _max_health;
+	}
+
+	
+	public void SetTimeFactor(float t){
+		time_factor = t;
 	}
 
 /*

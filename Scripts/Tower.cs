@@ -9,6 +9,8 @@ public partial class Tower : Area2D
 
 
 	private TowerAndTowerAccessories _root;
+
+	private Main _Main;
 	private TowerAnimation _animations;
 
 	// Called when the node enters the scene tree for the first time.
@@ -17,6 +19,7 @@ public partial class Tower : Area2D
 		_root = GetParent<TowerAndTowerAccessories>();
 		_animations = GetNode<TowerAnimation>("TowerAnimation");
 		boolet = GD.Load<PackedScene>("res://Projectile.tscn");
+		_Main = GetNode<Main>("/root/Main");
 	}
 	public Vector2 _target = new Vector2(0, 0);
 	
@@ -33,23 +36,12 @@ public partial class Tower : Area2D
 	public override void _Process(double delta)
 	{
 		// GD.Print($"Processing frame : {i}"); i++;
-
-		// Fire a projectile
-		if(i%80 == 0){
-			var projectile = boolet.Instantiate();
-			_root.AddChild(projectile);
-			var projectile2 = projectile.GetNode<Projectile>(".");
-			projectile2.Position = new Vector2(0,0);
-			projectile2.SetDirection(new Vector2(Mathf.Sin(_animations.Rotation), -Mathf.Cos(_animations.Rotation)));
-			projectile2.SetLifetime(100);
-			projectile2.SetSpeed(5f);
-		}
-		i++;
+		
 		// var vec = GetViewport().GetMousePosition();
 		var vec = GetNode<WaveManager>("/root/Main/WaveManager").GetClosest(_root.Position);
 		
 		var diff = vec - _root.Position;
-		GD.Print("l:: " + diff.Length());
+		// GD.Print("l:: " + diff.Length());
 		// Update target
 		if(vec != _target && diff.Length() <= _range){
 			UpdateTarget(vec);
@@ -58,6 +50,22 @@ public partial class Tower : Area2D
 		// Rotatte tower
 		_animations.Rotation += _rotationDirection * Mathf.Min(RotationSpeed * (float)delta, Mathf.Abs(_animations.Rotation - _rotationTarget));
 
+
+		// Fire a projectile
+		GD.Print(_root.time_factor);
+		if(i*_root.time_factor > 80  &&diff.Length() <= _range){
+			var projectile = boolet.Instantiate();
+			_root.AddChild(projectile);
+			var projectile2 = projectile.GetNode<Projectile>(".");
+			projectile2.Position = new Vector2(0,0);
+			projectile2.SetDirection(new Vector2(Mathf.Sin(_animations.Rotation), -Mathf.Cos(_animations.Rotation)));
+			projectile2.SetLifetime(100);
+			projectile2.SetSpeed(5f);
+			projectile2.SetTimeFactor(_root.time_factor);
+			_Main.TimeFactorUpdate += (float t) => projectile2.SetTimeFactor(t);
+			i = 0;
+		}
+		i++;
 
 	}
 
@@ -101,5 +109,6 @@ public partial class Tower : Area2D
 		
 		return Mathf.Atan2(vec[0], -vec[1]);
 	}
+
 
 }
