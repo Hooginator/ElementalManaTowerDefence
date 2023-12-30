@@ -82,7 +82,7 @@ public partial class WaveManager : Node2D
 				to_return = e.Position;
 			}
 			}catch(System.ObjectDisposedException){
-				GD.Print($"That enemy is dead, dont target it any more");
+				//GD.Print($"That enemy is dead, dont target it any more");
 				to_remove.Add(e);
 			}
 		}

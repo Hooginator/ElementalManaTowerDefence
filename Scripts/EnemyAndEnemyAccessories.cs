@@ -9,7 +9,8 @@ public partial class EnemyAndEnemyAccessories : Node2D
 	private int _current_health ;
 	// Path taken through map
 	private float _speed = 1f;
-	private List<Vector2> waypoints = new List<Vector2>(){new Vector2(300, 300), new Vector2(300, 600), new Vector2(600, 600), new Vector2(600, 300)};
+	private List<Vector2> waypoints = new List<Vector2>(){new Vector2(0, 0), new Vector2(300, 300), new Vector2(300, 600), new Vector2(600, 600), new Vector2(600, 300), new Vector2(900,300), new Vector2(1200,300)};
+
 	private int _waypoint_index = 0;
 	float time_factor = 1f;
 	
@@ -38,7 +39,7 @@ public partial class EnemyAndEnemyAccessories : Node2D
 		if(Mathf.Abs(raw[0]) + Mathf.Abs(raw[1]) < _speed * time_factor *2){
 			_waypoint_index = (_waypoint_index +1)%waypoints.Count;
 			if(_waypoint_index == 0){
-				GD.Print("Reached end point");
+				//GD.Print("Reached end point");
 				EmitSignal (SignalName.CreepReachedEnd);
 				QueueFree();
 			}
@@ -47,10 +48,10 @@ public partial class EnemyAndEnemyAccessories : Node2D
 	}
 
 	public void TakeDamage(int a){
-			GD.Print($"Taking {a} damage from {_current_health}");
+			//GD.Print($"Taking {a} damage from {_current_health}");
 		_current_health -= a;
 		if(_current_health < 0){
-			GD.Print("DEAD");
+			//GD.Print("DEAD");
 				EmitSignal (SignalName.CreepDied);
 			QueueFree();
 		}

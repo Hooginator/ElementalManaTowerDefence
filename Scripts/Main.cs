@@ -19,7 +19,7 @@ public partial class Main : Node2D
 	BuildingManager _BuildingManager;
 	GameUserInterface _GameUserInterface;
 
-	const int starting_lives = 20;
+	const int starting_lives = 200;
 	const int starting_gold = 200;
 	
 	int lives = 0;
@@ -101,12 +101,12 @@ public partial class Main : Node2D
 	#endregion
 	#region Creep Management
 	public void CreepDied(){
-		GD.Print("DIED MaIN");
+		//GD.Print("DIED MaIN");
 		gold +=1;
 		EmitSignal(SignalName.GoldUpdated, gold);
 			}
 	public void CreepReachedEnd(){
-		GD.Print("CreepReachedEnd MaIN");
+		//GD.Print("CreepReachedEnd MaIN");
 		lives -= 1;
 		EmitSignal(SignalName.LivesUpdated, lives);
 		if(lives <= 0){

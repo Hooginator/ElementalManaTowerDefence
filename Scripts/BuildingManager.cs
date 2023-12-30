@@ -12,6 +12,7 @@ public partial class BuildingManager : Node2D
 	// Tower parameters
 	List<int> costs = new List<int>(){  };
 	private int _default_cost = 20;
+	private float tower_size = 100f;
 	List<SpriteFrames> tower_bases = new List<SpriteFrames>();
 	List<TowerAndTowerAccessories.stats> tower_stats = new List<TowerAndTowerAccessories.stats>()
 	{
@@ -37,6 +38,10 @@ public partial class BuildingManager : Node2D
 
 	// Other
 	private Main _root;
+	private EnemyPath _EnemyPath;
+	// To get from elsehwewre later
+		private List<Vector2> waypoints = new List<Vector2>(){new Vector2(0, 0), new Vector2(300, 300), new Vector2(300, 600), new Vector2(600, 600), new Vector2(600, 300), new Vector2(900,300), new Vector2(1200,300)};
+
 	
 
 	#endregion
@@ -45,6 +50,7 @@ public partial class BuildingManager : Node2D
 	public override void _Ready()
 	{
 		_root = GetParent<Main>();
+		_EnemyPath = GetParent().GetNode<EnemyPath>("EnemyPath");
 		_towers.Add( GD.Load<PackedScene>("res://Tower.tscn"));
 
 		tower_bases.Add(GD.Load<SpriteFrames>("res://Images/Tower1Sprite.tres"));
@@ -92,8 +98,25 @@ public partial class BuildingManager : Node2D
 		 if (Input.IsActionPressed("Confirm1") )
 		{
 			if(_root.GetGold() >= costs[0]){
+				bool too_close = false;
+				Vector2 mouse_pos = GetViewport().GetMousePosition();
+			foreach(var t in tower_list){
+				var diff_vec = t.Position - mouse_pos;
+				if(diff_vec.Length() < tower_size){
+					too_close = true;
+					break;
+				}
+			}
+			if(!too_close){
+				// Too close to path?
+			if(_EnemyPath.GetClosestDistance(mouse_pos) < tower_size/2){
+				too_close = true;
+			}
+
+			}
+
 			// Build
-			if(!just_clicked)
+			if(!just_clicked && !too_close)
 			{	
 				just_clicked = true;
 				BuildTower();

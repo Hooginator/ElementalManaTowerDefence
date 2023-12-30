@@ -26,11 +26,13 @@ script = ExtResource("1_4nnsm")
 metadata/_edit_group_ = true
 
 [node name="TowerBase" type="AnimatedSprite2D" parent="Tower"]
+z_index = 1
 scale = Vector2(0.295, 0.295)
 sprite_frames = ExtResource("3_j7dsp")
 script = ExtResource("4_oqwdv")
 
 [node name="TowerAnimation" type="AnimatedSprite2D" parent="Tower"]
+z_index = 10
 scale = Vector2(0.306, 0.3)
 sprite_frames = SubResource("SpriteFrames_g7y3r")
 animation = &"Gun"

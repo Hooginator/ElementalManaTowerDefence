@@ -38,7 +38,7 @@ public partial class Projectile : Node2D
 	e.TakeDamage(_damage);
 
 	// Destroy projectile
-	GD.Print("Projectile area entered");
+	//GD.Print("Projectile area entered");
 	QueueFree();
 }
 

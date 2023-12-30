@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://dr7trf43s5pud"]
+
+[node name="EnemyPath" type="Line2D"]
