@@ -10,6 +10,8 @@ public partial class Main : Node2D
 	[Signal]
 	public delegate void GoldUpdatedEventHandler(int new_lives);
 	[Signal]
+	public delegate void WaveUpdatedEventHandler(int new_wave);
+	[Signal]
 	public delegate void GameOverEventHandler();
 	[Signal]
 	public delegate void TimeFactorUpdateEventHandler(float t);
@@ -126,4 +128,8 @@ public partial class Main : Node2D
 		EmitSignal(SignalName.GoldUpdated, gold);
 	}
 	#endregion
+
+	public void UpdateWave(int new_level){
+		EmitSignal(SignalName.WaveUpdated, new_level);
+	}
 }

@@ -45,14 +45,19 @@ public partial class WaveManager : Node2D
 
 	}
 	public void Restart(){
-		_wave_number = 0;
+		UpdateWave( 0) ;
 		StartWave();
 	}
 	public void StartWave(){
 		creep_remaining = 20;
 		is_wave_happening = true;
-		_wave_number+=1;
+		UpdateWave(_wave_number+1);
 
+	}
+
+	public void UpdateWave(int new_wave){
+		_wave_number = new_wave;
+		_Main.UpdateWave(new_wave);
 	}
 
 	private void SummonCreep(){

@@ -6,6 +6,7 @@ public partial class GameUserInterface : Control
 	private Main _Main;
 	private RichTextLabel _LivesCount;
 	private RichTextLabel _GoldCount;
+	private RichTextLabel _WaveCount;
 	private GameOverMenu _GameOverMenu;
 
 	[Signal]
@@ -23,6 +24,8 @@ public partial class GameUserInterface : Control
 		_Main.LivesUpdated += (int l) => UpdateLives(l);
 		_GoldCount = GetNode<RichTextLabel>("GoldCount");
 		_Main.GoldUpdated += (int g) => UpdateGold(g);
+		_WaveCount = GetNode<RichTextLabel>("WaveCount");
+		_Main.WaveUpdated += (int w) => UpdateWave(w);
 
 		// Game over menu
 		_GameOverMenu = GetNode<GameOverMenu>("GameOverMenu");
@@ -42,6 +45,9 @@ public partial class GameUserInterface : Control
 	}
 	public void UpdateGold(int g){
 		_GoldCount.Text = ""+g;
+	}
+	public void UpdateWave(int w){
+		_WaveCount.Text = ""+w;
 	}
 	public void GameOverMenuVisible(){
 		_GameOverMenu.Visible = true;

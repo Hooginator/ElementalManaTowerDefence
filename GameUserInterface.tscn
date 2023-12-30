@@ -80,3 +80,19 @@ offset_left = 617.0
 offset_top = 265.0
 offset_right = 1012.0
 offset_bottom = 412.0
+
+[node name="WaveText" type="RichTextLabel" parent="."]
+offset_left = 797.0
+offset_top = 5.0
+offset_right = 840.0
+offset_bottom = 43.0
+text = "Wave
+"
+
+[node name="WaveCount" type="RichTextLabel" parent="."]
+offset_left = 853.0
+offset_top = 6.0
+offset_right = 896.0
+offset_bottom = 44.0
+text = "000"
+script = ExtResource("1_3gjmf")
