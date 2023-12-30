@@ -29,7 +29,7 @@ public partial class EnemyAndEnemyAccessories : Node2D
 	public override void _Process(double delta)
 	{
 		Vector2 raw = waypoints[_waypoint_index] - Position;
-		Vector2 direction = Tower.SetLengthVector2(raw, 1);
+		Vector2 direction = Tools.SetLengthVector2(raw, 1);
 		Vector2 v_delta =  direction * _speed * time_factor;
 
 		Position += v_delta;

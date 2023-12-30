@@ -17,17 +17,19 @@ public partial class GameUserInterface : Control
 	public override void _Ready()
 	{
 		_Main = GetParent<Main>();
+
+		// Life & Gold UI
 		_LivesCount = GetNode<RichTextLabel>("LivesCount");
 		_Main.LivesUpdated += (int l) => UpdateLives(l);
 		_GoldCount = GetNode<RichTextLabel>("GoldCount");
 		_Main.GoldUpdated += (int g) => UpdateGold(g);
+
+		// Game over menu
 		_GameOverMenu = GetNode<GameOverMenu>("GameOverMenu");
 		_Main.GameOver += () => GameOverMenuVisible();
-
 		_GameOverMenu.GetNode<Button>("Quit").Pressed += () => EmitSignal(SignalName.Quit);
 		_GameOverMenu.GetNode<Button>("Retry").Pressed += () => EmitSignal(SignalName.Reset);
 		_GameOverMenu.GetNode<Button>("Retry").Pressed += () => _GameOverMenu.Visible = false;
-		
 		_GameOverMenu.Visible = false;
 	}
 

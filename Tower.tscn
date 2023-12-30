@@ -2,20 +2,10 @@
 
 [ext_resource type="Script" path="res://Scripts/Tower.cs" id="1_4nnsm"]
 [ext_resource type="Script" path="res://Scripts/TowerAndTowerAccessories.cs" id="1_8prc8"]
-[ext_resource type="Texture2D" uid="uid://b4lc4vdfpjsbb" path="res://Images/Base1.png" id="3_ua2bk"]
+[ext_resource type="SpriteFrames" uid="uid://dkf2qm8b8tun3" path="res://Images/Tower1Sprite.tres" id="3_j7dsp"]
 [ext_resource type="Texture2D" uid="uid://rydluykm07ws" path="res://Images/Gun1.png" id="4_kil0o"]
+[ext_resource type="Script" path="res://TowerBase.cs" id="4_oqwdv"]
 [ext_resource type="Script" path="res://Scripts/TowerAnimation.cs" id="5_esk7r"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_p4uql"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("3_ua2bk")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_g7y3r"]
 animations = [{
@@ -37,7 +27,8 @@ metadata/_edit_group_ = true
 
 [node name="TowerBase" type="AnimatedSprite2D" parent="Tower"]
 scale = Vector2(0.295, 0.295)
-sprite_frames = SubResource("SpriteFrames_p4uql")
+sprite_frames = ExtResource("3_j7dsp")
+script = ExtResource("4_oqwdv")
 
 [node name="TowerAnimation" type="AnimatedSprite2D" parent="Tower"]
 scale = Vector2(0.306, 0.3)

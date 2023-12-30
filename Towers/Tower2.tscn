@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://rajvn1y4d56h"]
+
+[ext_resource type="PackedScene" uid="uid://bkyc8vouh3s4n" path="res://Tower.tscn" id="1_25qjs"]
+
+[node name="Tower2" type="Node2D"]
+
+[node name="TowerAndTowerAccessories" parent="." instance=ExtResource("1_25qjs")]
+range = 1000.0
+damage = 5.0
+attack_rate = 3.0
+cost = 40
