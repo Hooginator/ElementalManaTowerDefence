@@ -102,6 +102,6 @@ text = "000"
 script = ExtResource("1_3gjmf")
 
 [node name="MouseCursor" type="AnimatedSprite2D" parent="."]
-scale = Vector2(0.155, 0.155)
+scale = Vector2(0.3, 0.3)
 sprite_frames = ExtResource("4_fjav3")
 script = ExtResource("5_8po58")

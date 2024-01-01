@@ -41,6 +41,7 @@ public partial class GameUserInterface : Control
 		_MouseCursor = GetNode<MouseCursor>("MouseCursor");
 		_BuildingManager.FailedBuild += () => _MouseCursor.ErrorMouse();
 		_BuildingManager.SuccessfulBuild += () => _MouseCursor.BaseMouse();
+		_BuildingManager.SelectBuild += (SpriteFrames s) => _MouseCursor.TowerMouse(s);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

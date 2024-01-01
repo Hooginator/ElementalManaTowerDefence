@@ -12,6 +12,8 @@ public partial class BuildingManager : Node2D
 	public delegate void FailedBuildEventHandler();
 	[Signal]
 	public delegate void SuccessfulBuildEventHandler();
+	[Signal]
+	public delegate void SelectBuildEventHandler(SpriteFrames s);
 	// Tower resources
 	public List<PackedScene> _towers = new List<PackedScene>();
 	List<TowerAndTowerAccessories> TowerAndTowerAccessoriesList = new List<TowerAndTowerAccessories>();
@@ -93,12 +95,15 @@ public partial class BuildingManager : Node2D
 		// Select Tower
 		if (Input.IsActionPressed("SelectBuild1")){
 			_tower_index = 0;
+			EmitSignal(SignalName.SelectBuild, tower_bases[_tower_index]);
 		}
 		if (Input.IsActionPressed("SelectBuild2")){
 			_tower_index = 1;
+			EmitSignal(SignalName.SelectBuild, tower_bases[_tower_index]);
 		}
 		if (Input.IsActionPressed("SelectBuild3")){
 			_tower_index = 2;
+			EmitSignal(SignalName.SelectBuild, tower_bases[_tower_index]);
 		}
 
 		

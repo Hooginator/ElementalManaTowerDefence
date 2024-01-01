@@ -36,4 +36,12 @@ public partial class MouseCursor : AnimatedSprite2D
 			frames_since_change = 0;
 		}
 	}
+
+	public void TowerMouse(SpriteFrames s){
+		
+		if(frames_since_change > min_frames_since_change){
+		SpriteFrames = s;
+			frames_since_change = 0;
+		}
+	}
 }
