@@ -5,6 +5,13 @@ using System.Collections.Generic;
 public partial class BuildingManager : Node2D
 {
 	#region variables
+
+	
+	
+	[Signal]
+	public delegate void FailedBuildEventHandler();
+	[Signal]
+	public delegate void SuccessfulBuildEventHandler();
 	// Tower resources
 	public List<PackedScene> _towers = new List<PackedScene>();
 	List<TowerAndTowerAccessories> TowerAndTowerAccessoriesList = new List<TowerAndTowerAccessories>();
@@ -120,6 +127,9 @@ public partial class BuildingManager : Node2D
 			{	
 				just_clicked = true;
 				BuildTower();
+				EmitSignal(SignalName.SuccessfulBuild);
+			}else{
+				EmitSignal(SignalName.FailedBuild);
 			}
 			}
 		}else{

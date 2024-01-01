@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://ckpigbn3k6l42"]
+[gd_scene load_steps=6 format=3 uid="uid://ckpigbn3k6l42"]
 
 [ext_resource type="Script" path="res://LivesCount.cs" id="1_3gjmf"]
 [ext_resource type="Script" path="res://GameUserInterface.cs" id="1_kln6c"]
 [ext_resource type="Script" path="res://GameOverMenu.cs" id="3_0vbsp"]
+[ext_resource type="SpriteFrames" uid="uid://b0jyh7q4b4ur0" path="res://Images/MouseGood.tres" id="4_fjav3"]
+[ext_resource type="Script" path="res://MouseCursor.cs" id="5_8po58"]
 
 [node name="GameUserInterface" type="Control"]
 layout_mode = 3
@@ -82,6 +84,7 @@ offset_right = 1012.0
 offset_bottom = 412.0
 
 [node name="WaveText" type="RichTextLabel" parent="."]
+layout_mode = 0
 offset_left = 797.0
 offset_top = 5.0
 offset_right = 840.0
@@ -90,9 +93,15 @@ text = "Wave
 "
 
 [node name="WaveCount" type="RichTextLabel" parent="."]
+layout_mode = 0
 offset_left = 853.0
 offset_top = 6.0
 offset_right = 896.0
 offset_bottom = 44.0
 text = "000"
 script = ExtResource("1_3gjmf")
+
+[node name="MouseCursor" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.155, 0.155)
+sprite_frames = ExtResource("4_fjav3")
+script = ExtResource("5_8po58")

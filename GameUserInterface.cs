@@ -4,10 +4,12 @@ using System;
 public partial class GameUserInterface : Control
 {
 	private Main _Main;
+	private BuildingManager _BuildingManager;
 	private RichTextLabel _LivesCount;
 	private RichTextLabel _GoldCount;
 	private RichTextLabel _WaveCount;
 	private GameOverMenu _GameOverMenu;
+	private MouseCursor _MouseCursor;
 
 	[Signal]
 	public delegate void ResetEventHandler();
@@ -18,7 +20,7 @@ public partial class GameUserInterface : Control
 	public override void _Ready()
 	{
 		_Main = GetParent<Main>();
-
+		_BuildingManager = _Main.GetNode<BuildingManager>("BuildingManager");
 		// Life & Gold UI
 		_LivesCount = GetNode<RichTextLabel>("LivesCount");
 		_Main.LivesUpdated += (int l) => UpdateLives(l);
@@ -34,6 +36,11 @@ public partial class GameUserInterface : Control
 		_GameOverMenu.GetNode<Button>("Retry").Pressed += () => EmitSignal(SignalName.Reset);
 		_GameOverMenu.GetNode<Button>("Retry").Pressed += () => _GameOverMenu.Visible = false;
 		_GameOverMenu.Visible = false;
+
+		// Mouse
+		_MouseCursor = GetNode<MouseCursor>("MouseCursor");
+		_BuildingManager.FailedBuild += () => _MouseCursor.ErrorMouse();
+		_BuildingManager.SuccessfulBuild += () => _MouseCursor.BaseMouse();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
