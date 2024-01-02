@@ -1,7 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://c016updkh5517"]
+[gd_scene load_steps=7 format=3 uid="uid://c016updkh5517"]
 
 [ext_resource type="Script" path="res://Scripts/Main.cs" id="1_4llic"]
-[ext_resource type="PackedScene" uid="uid://bkyc8vouh3s4n" path="res://Tower.tscn" id="1_lx2tr"]
 [ext_resource type="Script" path="res://Scripts/WaveManager.cs" id="3_va8b1"]
 [ext_resource type="PackedScene" uid="uid://ckpigbn3k6l42" path="res://GameUserInterface.tscn" id="5_o5lbt"]
 [ext_resource type="Script" path="res://Scripts/BuildingManager.cs" id="5_ujom6"]
@@ -10,12 +9,6 @@
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_4llic")
-
-[node name="TowerAndTowerAccessories" parent="." instance=ExtResource("1_lx2tr")]
-position = Vector2(233, 297)
-
-[node name="TowerAndTowerAccessories2" parent="." instance=ExtResource("1_lx2tr")]
-position = Vector2(823, 305)
 
 [node name="WaveManager" type="Node2D" parent="."]
 script = ExtResource("3_va8b1")

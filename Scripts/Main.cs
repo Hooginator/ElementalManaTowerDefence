@@ -6,6 +6,8 @@ public partial class Main : Node2D
 {
 	#region Signals
 	[Signal]
+	public delegate void GameStartedEventHandler();
+	[Signal]
 	public delegate void LivesUpdatedEventHandler(int new_lives);
 	[Signal]
 	public delegate void GoldUpdatedEventHandler(int new_lives);
@@ -56,6 +58,8 @@ public partial class Main : Node2D
 	public void StartGame(){
 		// Reset TIme
 		SetTimeFactor(1f);
+		
+		EmitSignal(SignalName.GameStarted);
 
 		// Reset Lives
 		lives = starting_lives;

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 
 public partial class BuildingManager : Node2D
 {
@@ -17,7 +18,10 @@ public partial class BuildingManager : Node2D
 	// Tower resources
 	public List<PackedScene> _towers = new List<PackedScene>();
 	List<TowerAndTowerAccessories> TowerAndTowerAccessoriesList = new List<TowerAndTowerAccessories>();
-
+	List<TowerDetails> initial_towers = new List<TowerDetails>(){
+		{new TowerDetails(200, 400, 0)},
+		{new TowerDetails(1000, 600, 2)}
+	};
 	// Tower parameters
 	List<int> costs = new List<int>(){  };
 	private int _default_cost = 20;
@@ -41,12 +45,14 @@ public partial class BuildingManager : Node2D
 	// Tower Management
 	private List<TowerAndTowerAccessories> tower_list = new List<TowerAndTowerAccessories>();
 	
+	
 	// Placement Management
 	bool just_clicked = false;
 	private int _tower_index = 0;
 
 	// Other
 	private Main _root;
+	private Vector2 building_pos = new Vector2(0,0);
 	private EnemyPath _EnemyPath;
 	// To get from elsehwewre later
 		private List<Vector2> waypoints = new List<Vector2>(){new Vector2(0, 0), new Vector2(300, 300), new Vector2(300, 600), new Vector2(600, 600), new Vector2(600, 300), new Vector2(900,300), new Vector2(1200,300)};
@@ -55,10 +61,20 @@ public partial class BuildingManager : Node2D
 
 	#endregion
 	#region Initialization
+
+	public void StartGame(){
+		foreach (var t in initial_towers){
+			building_pos = new Vector2(t.x, t.y);
+			_tower_index = t.type;
+			BuildTower(already_paid: true);
+		}
+	}
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		_root = GetParent<Main>();
+		_root.GameStarted += () => StartGame(); 
 		_EnemyPath = GetParent().GetNode<EnemyPath>("EnemyPath");
 		_towers.Add( GD.Load<PackedScene>("res://Tower.tscn"));
 
@@ -73,25 +89,51 @@ public partial class BuildingManager : Node2D
 			var temp = t.Instantiate();
 			var all_children = temp.GetChildren();
 			all_children.Add(temp);
+			bool found_it = false;
 			foreach (var c in all_children){
 				if (c is TowerAndTowerAccessories){
 					GD.Print($"FOUND TOWERSEESSES! + {i}");
 					TowerAndTowerAccessories tt = (TowerAndTowerAccessories) c;
 					TowerAndTowerAccessoriesList.Add(tt);
-					// Costs
-					costs.Add(tt.cost);
+
 					break;
 				}
 			}
+			
 			i++;
 		}
 
+		foreach (var t in tower_stats){
+			costs.Add(t.cost);
+		}
+
+
+
+
 	}
+
+	private TowerAndTowerAccessories GetTowerAndTowerAccessories(Node n){
+		var all_children = n.GetChildren();
+			all_children.Add(n);
+			foreach (var c in all_children){
+				if (c is TowerAndTowerAccessories){
+					return (TowerAndTowerAccessories) c;
+				}
+			}
+		return null;
+		}
 	#endregion
 	#region Process
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	int i=0;
 	public override void _Process(double delta)
 	{
+		// do this early, but not in ready... should be in the strart
+		if(i==1){
+
+		}
+		i++;
+
 		// Select Tower
 		if (Input.IsActionPressed("SelectBuild1")){
 			_tower_index = 0;
@@ -111,31 +153,36 @@ public partial class BuildingManager : Node2D
 		{
 			if(_root.GetGold() >= costs[0]){
 				bool too_close = false;
-				Vector2 mouse_pos = GetViewport().GetMousePosition();
-			foreach(var t in tower_list){
-				var diff_vec = t.Position - mouse_pos;
-				if(diff_vec.Length() < tower_size){
-					too_close = true;
-					break;
+				building_pos = GetViewport().GetMousePosition();
+				GD.Print($"Build POS:  {building_pos}");
+				foreach(var t in tower_list){
+					var diff_vec = t.Position - building_pos;
+					if(diff_vec.Length() < tower_size){
+						too_close = true;
+						GD.Print("Too Close To roqwer");
+						break;
+					}
 				}
-			}
-			if(!too_close){
-				// Too close to path?
-			if(_EnemyPath.GetClosestDistance(mouse_pos) < tower_size/2){
-				too_close = true;
-			}
+				if(!too_close){
+					// Too close to path?
+					if(_EnemyPath.GetClosestDistance(building_pos) < tower_size/2){
+						GD.Print($"TOO CLOSE TO PATH");
+						too_close = true;
+					}
 
-			}
+				}
 
-			// Build
-			if(!just_clicked && !too_close)
-			{	
-				just_clicked = true;
-				BuildTower();
-				EmitSignal(SignalName.SuccessfulBuild);
-			}else{
-				EmitSignal(SignalName.FailedBuild);
-			}
+					GD.Print($"Click to build  {just_clicked}    {too_close}");
+				// Build
+				if(!just_clicked && !too_close)
+				{	
+					GD.Print("Click to build");
+					just_clicked = true;
+					BuildTower();
+					EmitSignal(SignalName.SuccessfulBuild);
+				}else{
+					EmitSignal(SignalName.FailedBuild);
+				}
 			}
 		}else{
 			just_clicked = false;
@@ -143,26 +190,31 @@ public partial class BuildingManager : Node2D
 	}
 	#endregion
 	#region Tower Management
-	public void BuildTower(){
+	public void BuildTower(bool already_paid = false){
 		// Spend the gold needed
-		try{
-			_root.SpendGold(costs[0]);	
-		}catch(NotEnoughGoldException){
-			return;
+		if(!already_paid){
+			try{
+				GD.Print($"Gonna spend  {_tower_index}  {costs.Count}");
+				_root.SpendGold(costs[_tower_index]);	
+			}catch(NotEnoughGoldException){
+				GD.Print($"Not enough gold");
+				return;
+			}
 		}
-
+		GD.Print($"GONNA BUILD ({_towers.Count})");
 		// Build the tower
 		var just_built = _towers[0].Instantiate();
 		_root.AddChild(just_built);
 
 		// Initialize the tower
 		var tower = just_built.GetNode<TowerAndTowerAccessories>(".");
-		tower.Position = GetViewport().GetMousePosition();
+		tower.Position = building_pos;
 		tower.SetTimeFactor(_root.time_factor);
 
 		GD.Print($"Building tower with {_tower_index}");
 		tower.SetTowerBaseSprite(tower_bases[_tower_index]);
 		tower.Initialize(tower_stats[_tower_index]);
+		GD.Print($"Buildi2222222222222222ng tower with {_tower_index}");
 
 		// Don't double purchase
 		just_clicked = true;
@@ -187,4 +239,15 @@ public partial class BuildingManager : Node2D
 		tower_list.Clear();
 	}
 	#endregion
+
+	public struct TowerDetails{
+		public int type;
+		public int x;
+		public int y;
+		public TowerDetails(int x, int y, int type){
+			this.type = type;
+			this.x = x;
+			this.y = y;
+		}
+	}
 }

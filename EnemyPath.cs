@@ -26,7 +26,7 @@ public partial class EnemyPath : Line2D
 			if(i == 1){continue;}
 			
 		float d = Tools.GetDistanceToLine(waypoints[i-2], w, v);
-			GD.Print($"Path points:   {v}, {waypoints[i-2]}, {w} :  D ::{d}");
+			// GD.Print($"Path points:   {v}, {waypoints[i-2]}, {w} :  D ::{d}");
 		if(d < to_return){
 			to_return = d;
 		}
