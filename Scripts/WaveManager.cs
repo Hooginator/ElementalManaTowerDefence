@@ -108,4 +108,8 @@ public partial class WaveManager : Node2D
 		}
 		enemy_list.Clear();
 	}
+
+	public int GetWaveNumber(){
+		return _wave_number;
+	}
 }

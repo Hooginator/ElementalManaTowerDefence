@@ -12,6 +12,10 @@ public partial class EnemyAndEnemyAccessories : Node2D
 	private List<Vector2> waypoints = new List<Vector2>(){new Vector2(0, 0), new Vector2(300, 300), new Vector2(300, 600), new Vector2(600, 600), new Vector2(600, 300), new Vector2(900,300), new Vector2(1200,300)};
 
 	private int _waypoint_index = 0;
+
+	// Animation
+	float rotation_speed = 1.1f;
+	int rotation_direction = 1;
 	float time_factor = 1f;
 	
 	[Signal]
@@ -44,6 +48,8 @@ public partial class EnemyAndEnemyAccessories : Node2D
 				QueueFree();
 			}
 		}
+
+		// Animate
 
 	}
 

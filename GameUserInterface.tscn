@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://MouseCursor.cs" id="5_8po58"]
 
 [node name="GameUserInterface" type="Control"]
+z_index = 2000
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -105,3 +106,19 @@ script = ExtResource("1_3gjmf")
 scale = Vector2(0.3, 0.3)
 sprite_frames = ExtResource("4_fjav3")
 script = ExtResource("5_8po58")
+
+[node name="ScoreText" type="RichTextLabel" parent="."]
+offset_left = 653.0
+offset_top = 2.0
+offset_right = 696.0
+offset_bottom = 40.0
+text = "Score
+"
+
+[node name="ScoreCount" type="RichTextLabel" parent="."]
+offset_left = 709.0
+offset_top = 3.0
+offset_right = 792.0
+offset_bottom = 41.0
+text = "000000"
+script = ExtResource("1_3gjmf")

@@ -8,6 +8,7 @@ public partial class GameUserInterface : Control
 	private RichTextLabel _LivesCount;
 	private RichTextLabel _GoldCount;
 	private RichTextLabel _WaveCount;
+	private RichTextLabel _ScoreCount;
 	private GameOverMenu _GameOverMenu;
 	private MouseCursor _MouseCursor;
 
@@ -28,6 +29,8 @@ public partial class GameUserInterface : Control
 		_Main.GoldUpdated += (int g) => UpdateGold(g);
 		_WaveCount = GetNode<RichTextLabel>("WaveCount");
 		_Main.WaveUpdated += (int w) => UpdateWave(w);
+		_ScoreCount = GetNode<RichTextLabel>("ScoreCount");
+		_Main.ScoreUpdated += (int s) => UpdateScore(s);
 
 		// Game over menu
 		_GameOverMenu = GetNode<GameOverMenu>("GameOverMenu");
@@ -56,6 +59,9 @@ public partial class GameUserInterface : Control
 	}
 	public void UpdateWave(int w){
 		_WaveCount.Text = ""+w;
+	}
+	public void UpdateScore(int s){
+		_ScoreCount.Text = ""+s;
 	}
 	public void GameOverMenuVisible(){
 		_GameOverMenu.Visible = true;

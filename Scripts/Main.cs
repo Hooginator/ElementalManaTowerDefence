@@ -14,6 +14,8 @@ public partial class Main : Node2D
 	[Signal]
 	public delegate void WaveUpdatedEventHandler(int new_wave);
 	[Signal]
+	public delegate void ScoreUpdatedEventHandler(int new_score);
+	[Signal]
 	public delegate void GameOverEventHandler();
 	[Signal]
 	public delegate void TimeFactorUpdateEventHandler(float t);
@@ -28,6 +30,7 @@ public partial class Main : Node2D
 	
 	int lives = 0;
 	int gold = 0;
+	int score = 0;
 
 	public float time_factor = 3f;
 	#endregion
@@ -60,6 +63,7 @@ public partial class Main : Node2D
 		SetTimeFactor(1f);
 		
 		EmitSignal(SignalName.GameStarted);
+		EmitSignal(SignalName.ScoreUpdated, 0);
 
 		// Reset Lives
 		lives = starting_lives;
@@ -108,6 +112,8 @@ public partial class Main : Node2D
 	#region Creep Management
 	public void CreepDied(){
 		//GD.Print("DIED MaIN");
+		score += 1 * _WaveManager.GetWaveNumber();
+		EmitSignal(SignalName.ScoreUpdated, score);
 		gold +=1;
 		EmitSignal(SignalName.GoldUpdated, gold);
 			}
