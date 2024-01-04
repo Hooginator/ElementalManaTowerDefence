@@ -1,7 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://brtmnkgy7k1iy"]
+[gd_scene load_steps=9 format=3 uid="uid://brtmnkgy7k1iy"]
 
 [ext_resource type="Script" path="res://Scripts/EnemyAndEnemyAccessories.cs" id="1_hkfj3"]
-[ext_resource type="Texture2D" uid="uid://dbbkpo3tnt2ev" path="res://enemy.png" id="1_qp3il"]
+[ext_resource type="SpriteFrames" uid="uid://bj7ch7k5go0qd" path="res://Images/Enemy.tres" id="2_3wnu8"]
 [ext_resource type="Script" path="res://Enemy.cs" id="3_dc0fo"]
 [ext_resource type="Texture2D" uid="uid://bem0p6da0i7x7" path="res://HealthBar.png" id="4_uvls7"]
 [ext_resource type="Script" path="res://HealthBar.cs" id="5_dtcp6"]
@@ -11,20 +11,9 @@ radius = 34.0588
 
 [sub_resource type="Curve2D" id="Curve2D_qlxtl"]
 _data = {
-"points": PackedVector2Array(0, 0, 50, -50, 0, 0, 20, -20, -10, 10, 30, -20, -10, 10, 0, 0, 0, 0)
+"points": PackedVector2Array(0, 0, 50, -50, 0, 0, 20, -20, -10, 10, 10, -5, -10, 10, 0, 0, 0, 0)
 }
 point_count = 3
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_osunh"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("1_qp3il")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_0caul"]
 animations = [{
@@ -50,15 +39,15 @@ position = Vector2(5.96046e-08, 1.19209e-07)
 curve = SubResource("Curve2D_qlxtl")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
-position = Vector2(1.31614, -1.31306)
-progress = 2.0
+position = Vector2(5.72127, -5.69745)
+progress = 8.05681
 rotates = false
 
 [node name="Enemy" type="AnimatedSprite2D" parent="."]
 z_index = 5
 position = Vector2(2.31614, 0.686942)
 scale = Vector2(0.2, 0.2)
-sprite_frames = SubResource("SpriteFrames_osunh")
+sprite_frames = ExtResource("2_3wnu8")
 script = ExtResource("3_dc0fo")
 
 [node name="HealthBar" type="AnimatedSprite2D" parent="Enemy"]

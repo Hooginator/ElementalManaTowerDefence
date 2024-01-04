@@ -10,12 +10,13 @@ public partial class Enemy : AnimatedSprite2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_path = GetParent().GetNode<PathFollow2D>("Path2D");
+		_path = GetParent().GetNode<PathFollow2D>("Path2D/PathFollow2D");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 		_path.ProgressRatio = _path.ProgressRatio + (float) delta*animation_speed;
+		Position = _path.Position;
 	}
 }

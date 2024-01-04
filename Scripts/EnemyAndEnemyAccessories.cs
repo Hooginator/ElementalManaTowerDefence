@@ -9,6 +9,7 @@ public partial class EnemyAndEnemyAccessories : Node2D
 	private int _current_health ;
 	// Path taken through map
 	private float _speed = 1f;
+	private int _damage = 1;
 	private List<Vector2> waypoints = new List<Vector2>(){new Vector2(0, 0), new Vector2(300, 300), new Vector2(300, 600), new Vector2(600, 600), new Vector2(600, 300), new Vector2(900,300), new Vector2(1200,300)};
 
 	private int _waypoint_index = 0;
@@ -35,6 +36,14 @@ public partial class EnemyAndEnemyAccessories : Node2D
 		HealthUpdated += (c, m) => _Healthbar.SetHealth(c, m);
 		EmitSignal(SignalName.HealthUpdated, _current_health, _max_health);
 		CreepDied += () => GD.Print("Hello!");
+	}
+
+	public void Initialize(int w, stats s, SpriteFrames sf){
+		_max_health = (int) (s.max_health * Mathf.Sqrt(w));
+		_current_health = _max_health;
+		_speed = s.speed;
+		_damage = s.damage;
+		GetNode<AnimatedSprite2D>("Enemy").SpriteFrames = sf;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -81,14 +90,24 @@ public partial class EnemyAndEnemyAccessories : Node2D
 		time_factor = t;
 	}
 
-/*
-private void _on_body_entered(Node2D body)
-{
-	// Replace with function body.
-			GD.Print($"COLLISION");
-	TakeDamage(1);
-}
-*/
+
+	public struct stats{
+		public int max_health { get; set; } = 1;
+		public float speed = 1.5f;
+		public int damage = 1; 
+		public int spawn_rate = 150;
+		public int spawn_total = 20;
+		public int gold = 2;
+	public int cost  { get; set; } = 10; 
+		public stats(int  _max_health, float _speed, int _damage, int _spawn_rate , int _spawn_total, int _gold){
+			max_health = _max_health;
+			speed = _speed;
+			damage = _damage;
+			spawn_rate = _spawn_rate;
+			spawn_total = _spawn_total;
+			gold = _gold;
+		}
+	}
 
 }
 

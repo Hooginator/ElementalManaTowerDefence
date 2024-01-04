@@ -4,8 +4,16 @@ using System.Collections.Generic;
 
 public partial class WaveManager : Node2D
 {
+	private List<EnemyAndEnemyAccessories.stats> enemy_base_state = new List<EnemyAndEnemyAccessories.stats>()
+	{
+		{new EnemyAndEnemyAccessories.stats(2, 1.5f, 1, 150, 20, 2)},
+		{new EnemyAndEnemyAccessories.stats(1, 3f, 1, 40, 50, 1)},
+		{new EnemyAndEnemyAccessories.stats(5, 0.5f, 5, 400, 10, 10)}
+	};
 	private List<EnemyAndEnemyAccessories> enemy_list = new List<EnemyAndEnemyAccessories>();
 	public PackedScene enemy { get; set; }
+	
+	List<SpriteFrames> enemy_bases = new List<SpriteFrames>();
 	float time_factor = 1f;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -14,8 +22,13 @@ public partial class WaveManager : Node2D
 		_Main = GetParent<Main>();
 		_Main.TimeFactorUpdate += (float t) => SetTimeFactor(t);
 		
+		
+		enemy_bases.Add(GD.Load<SpriteFrames>("res://Images/Enemy.tres"));
+		enemy_bases.Add(GD.Load<SpriteFrames>("res://Images/SmallEnemy.tres"));
+		enemy_bases.Add(GD.Load<SpriteFrames>("res://Images/BigEnemy.tres"));
 	}
 	float i=0f;
+	int spawn_rate= 150;
 	int creep_remaining = 0;
 	bool is_wave_happening = false;
 	int _wave_number = 0;
@@ -25,7 +38,7 @@ public partial class WaveManager : Node2D
 	public override void _Process(double delta)
 	{
 				// Summon a creep
-		if(i/150 > 1 && is_wave_happening){
+		if(i/spawn_rate > 1 && is_wave_happening){
 			if(creep_remaining > 0){
 			SummonCreep();
 			creep_remaining -= 1;
@@ -38,9 +51,10 @@ public partial class WaveManager : Node2D
 	}
 
 	private async void EndWave(){
-		creep_remaining = 20;
-	await ToSignal(GetTree().CreateTimer(7.0f), SceneTreeTimer.SignalName.Timeout);
-		
+		is_wave_happening = false;
+		// creep_remaining = 20;
+	await ToSignal(GetTree().CreateTimer(3.0f), SceneTreeTimer.SignalName.Timeout);
+		// want to wait until previous wave defeated
 		StartWave();
 
 	}
@@ -49,9 +63,10 @@ public partial class WaveManager : Node2D
 		StartWave();
 	}
 	public void StartWave(){
-		creep_remaining = 20;
 		is_wave_happening = true;
 		UpdateWave(_wave_number+1);
+		creep_remaining = enemy_base_state[_wave_number%enemy_base_state.Count].spawn_total;
+		spawn_rate = enemy_base_state[_wave_number%enemy_base_state.Count].spawn_rate;
 
 	}
 
@@ -64,7 +79,10 @@ public partial class WaveManager : Node2D
 			var creep = enemy.Instantiate();
 			AddChild(creep);
 			var creep2 = creep.GetNode<EnemyAndEnemyAccessories>(".");
-			creep2.SetLevel(_wave_number);
+			creep2.Initialize(_wave_number
+			,	enemy_base_state[_wave_number%enemy_base_state.Count]
+			, enemy_bases[_wave_number%enemy_base_state.Count]);
+			// Still need to change graphic
 			creep2.Position = new Vector2(0,0);
 			enemy_list.Add(creep2);
 

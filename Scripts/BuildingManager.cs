@@ -31,13 +31,13 @@ public partial class BuildingManager : Node2D
 	{
 		// Basic
 		{new TowerAndTowerAccessories.stats(
-			_rotation_speed: 1f, _range: 500f, _damage: 2f, _attack_rate: 1f, _cost: 10, _projectile_speed: 1f, _projectile_lifetime: 400f)},
+			_rotation_speed: 1f, _range: 500f, _damage: 3f, _attack_rate: 1f, _cost: 10, _projectile_speed: 1f, _projectile_lifetime: 400f)},
 		//  Rapid Fire
 		{new TowerAndTowerAccessories.stats(
-			_rotation_speed: 2f, _range: 400f, _damage: 1f, _attack_rate: 3f, _cost: 10, _projectile_speed: 2f, _projectile_lifetime: 200f)},
+			_rotation_speed: 3f, _range: 400f, _damage: 1f, _attack_rate: 4f, _cost: 10, _projectile_speed: 2f, _projectile_lifetime: 200f)},
 		// Sniper
 		{new TowerAndTowerAccessories.stats(
-			_rotation_speed: 0.5f, _range: 800f, _damage: 10f, _attack_rate: 0.3f, _cost: 10, _projectile_speed: 8f, _projectile_lifetime: 400f)}
+			_rotation_speed: 0.5f, _range: 1000f, _damage: 10f, _attack_rate: 0.4f, _cost: 10, _projectile_speed: 8f, _projectile_lifetime: 1000f)}
 		
 		
 	};

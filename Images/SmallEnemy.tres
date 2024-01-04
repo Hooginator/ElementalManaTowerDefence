@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://k5ul3rlayb43"]
+
+[ext_resource type="Texture2D" uid="uid://c8nb0e3yfrc56" path="res://Images/SmallEnemy.png" id="1_wifq8"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_wifq8")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
