@@ -1,8 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://brtmnkgy7k1iy"]
+[gd_scene load_steps=10 format=3 uid="uid://brtmnkgy7k1iy"]
 
 [ext_resource type="Script" path="res://Scripts/EnemyAndEnemyAccessories.cs" id="1_hkfj3"]
 [ext_resource type="Texture2D" uid="uid://dbbkpo3tnt2ev" path="res://enemy.png" id="1_qp3il"]
 [ext_resource type="Script" path="res://Enemy.cs" id="3_dc0fo"]
+[ext_resource type="Texture2D" uid="uid://bem0p6da0i7x7" path="res://HealthBar.png" id="4_uvls7"]
+[ext_resource type="Script" path="res://HealthBar.cs" id="5_dtcp6"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tu6cs"]
 radius = 34.0588
@@ -24,6 +26,17 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_0caul"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_uvls7")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
 [node name="EnemyAndEnemyAccessories" type="Area2D"]
 collision_layer = 4
 collision_mask = 2
@@ -34,7 +47,6 @@ shape = SubResource("CircleShape2D_tu6cs")
 
 [node name="Path2D" type="Path2D" parent="."]
 position = Vector2(5.96046e-08, 1.19209e-07)
-scale = Vector2(1, 1)
 curve = SubResource("Curve2D_qlxtl")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
@@ -42,9 +54,14 @@ position = Vector2(1.31614, -1.31306)
 progress = 2.0
 rotates = false
 
-[node name="Enemy" type="AnimatedSprite2D" parent="Path2D/PathFollow2D"]
+[node name="Enemy" type="AnimatedSprite2D" parent="."]
 z_index = 5
-position = Vector2(1, 2)
+position = Vector2(2.31614, 0.686942)
 scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_osunh")
 script = ExtResource("3_dc0fo")
+
+[node name="HealthBar" type="AnimatedSprite2D" parent="Enemy"]
+position = Vector2(-11.5807, -208.435)
+sprite_frames = SubResource("SpriteFrames_0caul")
+script = ExtResource("5_dtcp6")

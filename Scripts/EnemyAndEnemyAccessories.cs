@@ -19,14 +19,21 @@ public partial class EnemyAndEnemyAccessories : Node2D
 	float time_factor = 1f;
 	
 	[Signal]
+	public delegate void HealthUpdatedEventHandler(int health, int max_health);
+	[Signal]
 	public delegate void CreepReachedEndEventHandler();
 	[Signal]
 	public delegate void CreepDiedEventHandler();
+
+	HealthBar _Healthbar;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		_current_health =_max_health;
+		_Healthbar = GetNode<HealthBar>("Enemy/HealthBar");
+		HealthUpdated += (c, m) => _Healthbar.SetHealth(c, m);
+		EmitSignal(SignalName.HealthUpdated, _current_health, _max_health);
 		CreepDied += () => GD.Print("Hello!");
 	}
 
@@ -54,9 +61,9 @@ public partial class EnemyAndEnemyAccessories : Node2D
 	}
 
 	public void TakeDamage(int a){
-			//GD.Print($"Taking {a} damage from {_current_health}");
 		_current_health -= a;
-		if(_current_health < 0){
+		EmitSignal(SignalName.HealthUpdated, _current_health, _max_health);
+		if(_current_health <= 0){
 			//GD.Print("DEAD");
 				EmitSignal (SignalName.CreepDied);
 			QueueFree();
@@ -66,6 +73,7 @@ public partial class EnemyAndEnemyAccessories : Node2D
 	public void SetLevel(int l){
 		_max_health = 1 + l;
 		_current_health = _max_health;
+		EmitSignal(SignalName.HealthUpdated, _current_health, _max_health);
 	}
 
 	
