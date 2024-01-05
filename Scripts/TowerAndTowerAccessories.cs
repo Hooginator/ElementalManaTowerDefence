@@ -33,6 +33,7 @@ public partial class TowerAndTowerAccessories : Node2D
 		damage = s.damage;
 		attack_rate = s.attack_rate;
 		cost = s.cost;
+		projectile_speed = s.projectile_speed;
 	}
 
 	public override void _Ready()

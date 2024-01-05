@@ -64,7 +64,7 @@ public partial class Tower : Area2D
 			var projectile2 = projectile.GetNode<Projectile>(".");
 			projectile2.Position = new Vector2(0,0);
 			projectile2.SetDirection(new Vector2(Mathf.Sin(_animations.Rotation), -Mathf.Cos(_animations.Rotation)));
-			projectile2.Initialize(lifetime: 200, speed: 2.2f, damage: 1);
+			projectile2.Initialize(lifetime: (int)_root.projectile_lifetime, speed: _root.projectile_speed, damage: (int)_root.damage);
 
 			// Manage time
 			projectile2.SetTimeFactor(_root.time_factor);

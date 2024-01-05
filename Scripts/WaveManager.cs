@@ -55,7 +55,7 @@ public partial class WaveManager : Node2D
 		// creep_remaining = 20;
 	await ToSignal(GetTree().CreateTimer(3.0f), SceneTreeTimer.SignalName.Timeout);
 		// want to wait until previous wave defeated
-		StartWave();
+		// StartWave();
 
 	}
 	public void Restart(){
@@ -82,12 +82,13 @@ public partial class WaveManager : Node2D
 			creep2.Initialize(_wave_number
 			,	enemy_base_state[_wave_number%enemy_base_state.Count]
 			, enemy_bases[_wave_number%enemy_base_state.Count]);
-			// Still need to change graphic
+			creep2.CreepDied += (EnemyAndEnemyAccessories e) => RemoveEnemy(e);
+			creep2.CreepReachedEnd += (EnemyAndEnemyAccessories e) => RemoveEnemy(e);
 			creep2.Position = new Vector2(0,0);
 			enemy_list.Add(creep2);
 
-			creep2.CreepDied += () => _Main.CreepDied();
-			creep2.CreepReachedEnd += () => _Main.CreepReachedEnd();
+			creep2.CreepDied += (EnemyAndEnemyAccessories e) => _Main.CreepDied();
+			creep2.CreepReachedEnd += (EnemyAndEnemyAccessories e) => _Main.CreepReachedEnd();
 			creep2.SetTimeFactor(time_factor);
 			_Main.TimeFactorUpdate += (float t) => creep2.SetTimeFactor(t);
 
@@ -111,9 +112,18 @@ public partial class WaveManager : Node2D
 		}
 		foreach(var e in to_remove){
 			// remove dead
-			enemy_list.Remove(e);
+			RemoveEnemy(e);
 		}
 		return to_return;
+	}
+
+	public void RemoveEnemy(EnemyAndEnemyAccessories e){
+		enemy_list.Remove(e);
+
+		// Check if that's the last creep for the wave
+		if(!is_wave_happening && enemy_list.Count == 0 ){
+			StartWave();
+		}
 	}
 
 	

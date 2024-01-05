@@ -22,9 +22,9 @@ public partial class EnemyAndEnemyAccessories : Node2D
 	[Signal]
 	public delegate void HealthUpdatedEventHandler(int health, int max_health);
 	[Signal]
-	public delegate void CreepReachedEndEventHandler();
+	public delegate void CreepReachedEndEventHandler(EnemyAndEnemyAccessories e);
 	[Signal]
-	public delegate void CreepDiedEventHandler();
+	public delegate void CreepDiedEventHandler(EnemyAndEnemyAccessories e);
 
 	HealthBar _Healthbar;
 
@@ -35,7 +35,7 @@ public partial class EnemyAndEnemyAccessories : Node2D
 		_Healthbar = GetNode<HealthBar>("Enemy/HealthBar");
 		HealthUpdated += (c, m) => _Healthbar.SetHealth(c, m);
 		EmitSignal(SignalName.HealthUpdated, _current_health, _max_health);
-		CreepDied += () => GD.Print("Hello!");
+		CreepDied += (EnemyAndEnemyAccessories e) => GD.Print("Hello!");
 	}
 
 	public void Initialize(int w, stats s, SpriteFrames sf){
@@ -60,7 +60,7 @@ public partial class EnemyAndEnemyAccessories : Node2D
 			_waypoint_index = (_waypoint_index +1)%waypoints.Count;
 			if(_waypoint_index == 0){
 				//GD.Print("Reached end point");
-				EmitSignal (SignalName.CreepReachedEnd);
+				EmitSignal (SignalName.CreepReachedEnd, this);
 				QueueFree();
 			}
 		}
@@ -74,7 +74,7 @@ public partial class EnemyAndEnemyAccessories : Node2D
 		EmitSignal(SignalName.HealthUpdated, _current_health, _max_health);
 		if(_current_health <= 0){
 			//GD.Print("DEAD");
-				EmitSignal (SignalName.CreepDied);
+				EmitSignal (SignalName.CreepDied, this);
 			QueueFree();
 		}
 	}
