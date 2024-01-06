@@ -26,6 +26,7 @@ public partial class TowerAndTowerAccessories : Node2D
 
 	BuildingManager _BuildingManager;
 	TowerBase _TowerBase;
+	Tower _Tower;
 
 	public void Initialize(stats s){
 		rotation_speed = s.rotation_speed;
@@ -43,6 +44,10 @@ public partial class TowerAndTowerAccessories : Node2D
 		_BuildingManager = GetParent().GetNode<BuildingManager>("BuildingManager");
 		_BuildingManager.AddTower(this);
 		_TowerBase = GetNode<TowerBase>("Tower/TowerBase");
+		_Tower = GetNode<Tower>("Tower");
+
+	// Select on click
+		// _Tower.InputEvent += (Node n, InputEvent @e, long l) => 	CheckIfSelect(@e);
 
 	}
 
@@ -57,6 +62,20 @@ public partial class TowerAndTowerAccessories : Node2D
 
 	public void SetTowerBaseSprite(SpriteFrames s){
 		_TowerBase.SpriteFrames = s;
+	}
+/*
+	public void CheckIfSelect(InputEvent @e){
+		GD.Print("CHECK IF SELECT");
+		if(@e is InputEventMouseButton i){
+			if(i.Pressed){
+				Select();
+			}
+		}
+	}
+	*/
+
+	public void Select(){
+		GD.Print($"SELECTED TOWER: D: {damage}");
 	}
 
 	public struct stats{

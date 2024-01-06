@@ -4,12 +4,18 @@ using System;
 public partial class GameUserInterface : Control
 {
 	private Main _Main;
+	private WaveManager _WaveManager;
 	private BuildingManager _BuildingManager;
 	private RichTextLabel _LivesCount;
 	private RichTextLabel _GoldCount;
 	private RichTextLabel _WaveCount;
 	private RichTextLabel _ScoreCount;
+	private RichTextLabel _SpeedCount;
+	private RichTextLabel _WaveTypeDetails;
 	private GameOverMenu _GameOverMenu;
+
+	private Button _SpeedUp;
+	private Button _SlowDown;
 	private MouseCursor _MouseCursor;
 
 	[Signal]
@@ -21,6 +27,7 @@ public partial class GameUserInterface : Control
 	public override void _Ready()
 	{
 		_Main = GetParent<Main>();
+		_WaveManager = _Main.GetNode<WaveManager>("WaveManager");
 		_BuildingManager = _Main.GetNode<BuildingManager>("BuildingManager");
 		// Life & Gold UI
 		_LivesCount = GetNode<RichTextLabel>("LivesCount");
@@ -31,6 +38,17 @@ public partial class GameUserInterface : Control
 		_Main.WaveUpdated += (int w) => UpdateWave(w);
 		_ScoreCount = GetNode<RichTextLabel>("ScoreCount");
 		_Main.ScoreUpdated += (int s) => UpdateScore(s);
+		_SpeedCount = GetNode<RichTextLabel>("SpeedCount");
+		_Main.TimeFactorUpdate += (float s) => UpdateSpeed(s);
+		_WaveTypeDetails = GetNode<RichTextLabel>("WaveTypeDetails");
+		_WaveManager.WaveStarted += () => UpdateWaveType();
+
+		// Buttons
+		_SpeedUp = GetNode<Button>("SpeedUp");
+		_SpeedUp.ButtonDown += () => _Main.SpeedUp();
+		_SlowDown = GetNode<Button>("SlowDown");
+		_SlowDown.ButtonDown += () => _Main.SlowDown();
+		
 
 		// Game over menu
 		_GameOverMenu = GetNode<GameOverMenu>("GameOverMenu");
@@ -44,6 +62,7 @@ public partial class GameUserInterface : Control
 		_MouseCursor = GetNode<MouseCursor>("MouseCursor");
 		_BuildingManager.FailedBuild += () => _MouseCursor.ErrorMouse();
 		_BuildingManager.SuccessfulBuild += () => _MouseCursor.BaseMouse();
+		_BuildingManager.CancelBuild += () => _MouseCursor.BaseMouse();
 		_BuildingManager.SelectBuild += (SpriteFrames s) => _MouseCursor.TowerMouse(s);
 	}
 
@@ -62,6 +81,12 @@ public partial class GameUserInterface : Control
 	}
 	public void UpdateScore(int s){
 		_ScoreCount.Text = ""+s;
+	}
+	public void UpdateSpeed(float s){
+		_SpeedCount.Text = ""+s;
+	}
+	public void UpdateWaveType(){
+		_WaveTypeDetails.Text = ""+_WaveManager.GetNextWaveName();
 	}
 	public void GameOverMenuVisible(){
 		_GameOverMenu.Visible = true;

@@ -14,6 +14,8 @@ public partial class BuildingManager : Node2D
 	[Signal]
 	public delegate void SuccessfulBuildEventHandler();
 	[Signal]
+	public delegate void CancelBuildEventHandler();
+	[Signal]
 	public delegate void SelectBuildEventHandler(SpriteFrames s);
 	// Tower resources
 	public List<PackedScene> _towers = new List<PackedScene>();
@@ -31,13 +33,13 @@ public partial class BuildingManager : Node2D
 	{
 		// Basic
 		{new TowerAndTowerAccessories.stats(
-			_rotation_speed: 1f, _range: 500f, _damage: 3f, _attack_rate: 1f, _cost: 10, _projectile_speed: 1f, _projectile_lifetime: 400f)},
+			_rotation_speed: 2f, _range: 500f, _damage: 3f, _attack_rate: 1f, _cost: 10, _projectile_speed: 2f, _projectile_lifetime: 400f)},
 		//  Rapid Fire
 		{new TowerAndTowerAccessories.stats(
-			_rotation_speed: 3f, _range: 400f, _damage: 1f, _attack_rate: 4f, _cost: 10, _projectile_speed: 2f, _projectile_lifetime: 200f)},
+			_rotation_speed: 8f, _range: 400f, _damage: 1f, _attack_rate: 4f, _cost: 10, _projectile_speed: 4f, _projectile_lifetime: 200f)},
 		// Sniper
 		{new TowerAndTowerAccessories.stats(
-			_rotation_speed: 0.5f, _range: 1000f, _damage: 10f, _attack_rate: 0.4f, _cost: 10, _projectile_speed: 8f, _projectile_lifetime: 1000f)}
+			_rotation_speed: 1f, _range: 1000f, _damage: 10f, _attack_rate: 0.4f, _cost: 10, _projectile_speed: 16f, _projectile_lifetime: 1000f)}
 		
 		
 	};
@@ -48,7 +50,7 @@ public partial class BuildingManager : Node2D
 	
 	// Placement Management
 	bool just_clicked = false;
-	private int _tower_index = 0;
+	private int _tower_index = -1;
 
 	// Other
 	private Main _root;
@@ -68,6 +70,7 @@ public partial class BuildingManager : Node2D
 			_tower_index = t.type;
 			BuildTower(already_paid: true);
 		}
+		_tower_index = -1;
 	}
 
 	// Called when the node enters the scene tree for the first time.
@@ -147,36 +150,59 @@ public partial class BuildingManager : Node2D
 			_tower_index = 2;
 			EmitSignal(SignalName.SelectBuild, tower_bases[_tower_index]);
 		}
+		
+		if (Input.IsActionPressed("Cancel")){
+			_tower_index = -1;
+			EmitSignal(SignalName.CancelBuild);
+		}
 
 		
 		 if (Input.IsActionPressed("Confirm1") )
 		{
+
+		if(_tower_index < 0){
+			// Nothing selected to build,  select tower maybe
+			
+			Vector2 selection_pos = GetViewport().GetMousePosition();
+			// select tower :/
+				foreach(var t in tower_list){
+					var diff_vec = t.Position - selection_pos;
+					if(diff_vec.Length() < tower_size){
+						t.Select();
+						// GD.Print("Too Close To roqwer");
+						break;
+					}
+				}
+
+			return;
+		}
+
 			if(_root.GetGold() >= costs[0]){
 				bool too_close = false;
 				building_pos = GetViewport().GetMousePosition();
-				GD.Print($"Build POS:  {building_pos}");
+				// GD.Print($"Build POS:  {building_pos}");
 				foreach(var t in tower_list){
 					var diff_vec = t.Position - building_pos;
 					if(diff_vec.Length() < tower_size){
 						too_close = true;
-						GD.Print("Too Close To roqwer");
+						// GD.Print("Too Close To roqwer");
 						break;
 					}
 				}
 				if(!too_close){
 					// Too close to path?
 					if(_EnemyPath.GetClosestDistance(building_pos) < tower_size/2){
-						GD.Print($"TOO CLOSE TO PATH");
+						// GD.Print($"TOO CLOSE TO PATH");
 						too_close = true;
 					}
 
 				}
 
-					GD.Print($"Click to build  {just_clicked}    {too_close}");
+					// GD.Print($"Click to build  {just_clicked}    {too_close}");
 				// Build
 				if(!just_clicked && !too_close)
 				{	
-					GD.Print("Click to build");
+					// GD.Print("Click to build");
 					just_clicked = true;
 					BuildTower();
 					EmitSignal(SignalName.SuccessfulBuild);
@@ -191,6 +217,10 @@ public partial class BuildingManager : Node2D
 	#endregion
 	#region Tower Management
 	public void BuildTower(bool already_paid = false){
+		if(_tower_index < 0){
+			// Nothing selected
+			return;
+		}
 		// Spend the gold needed
 		if(!already_paid){
 			try{
@@ -215,6 +245,8 @@ public partial class BuildingManager : Node2D
 		tower.SetTowerBaseSprite(tower_bases[_tower_index]);
 		tower.Initialize(tower_stats[_tower_index]);
 		GD.Print($"Buildi2222222222222222ng tower with {_tower_index}");
+
+		_tower_index = -1;
 
 		// Don't double purchase
 		just_clicked = true;

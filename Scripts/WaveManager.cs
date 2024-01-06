@@ -4,11 +4,14 @@ using System.Collections.Generic;
 
 public partial class WaveManager : Node2D
 {
+	
+	[Signal]
+	public delegate void WaveStartedEventHandler();
 	private List<EnemyAndEnemyAccessories.stats> enemy_base_state = new List<EnemyAndEnemyAccessories.stats>()
 	{
-		{new EnemyAndEnemyAccessories.stats(2, 1.5f, 1, 150, 20, 2)},
-		{new EnemyAndEnemyAccessories.stats(1, 3f, 1, 40, 50, 1)},
-		{new EnemyAndEnemyAccessories.stats(5, 0.5f, 5, 400, 10, 10)}
+		{new EnemyAndEnemyAccessories.stats("Basic", 2, 1.5f, 1, 150, 20, 2, 5)},
+		{new EnemyAndEnemyAccessories.stats("Small", 1, 3f, 1, 40, 50, 1, 2)},
+		{new EnemyAndEnemyAccessories.stats("Big", 5, 0.5f, 5, 400, 10, 10, 20)}
 	};
 	private List<EnemyAndEnemyAccessories> enemy_list = new List<EnemyAndEnemyAccessories>();
 	public PackedScene enemy { get; set; }
@@ -65,6 +68,7 @@ public partial class WaveManager : Node2D
 	public void StartWave(){
 		is_wave_happening = true;
 		UpdateWave(_wave_number+1);
+		EmitSignal(SignalName.WaveStarted);
 		creep_remaining = enemy_base_state[_wave_number%enemy_base_state.Count].spawn_total;
 		spawn_rate = enemy_base_state[_wave_number%enemy_base_state.Count].spawn_rate;
 
@@ -87,7 +91,7 @@ public partial class WaveManager : Node2D
 			creep2.Position = new Vector2(0,0);
 			enemy_list.Add(creep2);
 
-			creep2.CreepDied += (EnemyAndEnemyAccessories e) => _Main.CreepDied();
+			creep2.CreepDied += (EnemyAndEnemyAccessories e) => _Main.CreepDied(e);
 			creep2.CreepReachedEnd += (EnemyAndEnemyAccessories e) => _Main.CreepReachedEnd();
 			creep2.SetTimeFactor(time_factor);
 			_Main.TimeFactorUpdate += (float t) => creep2.SetTimeFactor(t);
@@ -115,6 +119,10 @@ public partial class WaveManager : Node2D
 			RemoveEnemy(e);
 		}
 		return to_return;
+	}
+
+	public String GetNextWaveName(){
+		return enemy_base_state[(_wave_number + 1)%enemy_base_state.Count].name;
 	}
 
 	public void RemoveEnemy(EnemyAndEnemyAccessories e){

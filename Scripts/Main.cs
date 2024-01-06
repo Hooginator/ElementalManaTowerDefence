@@ -19,6 +19,11 @@ public partial class Main : Node2D
 	public delegate void GameOverEventHandler();
 	[Signal]
 	public delegate void TimeFactorUpdateEventHandler(float t);
+	[Signal]
+	public delegate void TimeFactorSpeedUpEventHandler();
+	[Signal]
+	public delegate void TimeFactorSlowDownEventHandler();
+
 	#endregion
 	#region Variables
 	WaveManager _WaveManager;
@@ -43,6 +48,9 @@ public partial class Main : Node2D
 		_GameUserInterface = GetNode<GameUserInterface>("GameUserInterface");
 		_GameUserInterface.Reset += () => ReStartGame();
 		_GameUserInterface.Quit += () => QuitGame();
+
+		TimeFactorSlowDown += () => SlowDown();
+		TimeFactorSpeedUp += () => SpeedUp();
 	}
 	#endregion
 	#region Time Management
@@ -101,20 +109,22 @@ public partial class Main : Node2D
 		// Time Speedup / slowdown with + -
 		if (Input.IsActionPressed("SpeedUp"))
 		{
+			EmitSignal(SignalName.TimeFactorSpeedUp);
 			SetTimeFactor(Mathf.Min(time_factor + 0.5f, 10f));
 		}
 		if (Input.IsActionPressed("SlowDown"))
 		{
+			EmitSignal(SignalName.TimeFactorSlowDown);
 			SetTimeFactor(Mathf.Max(time_factor - 0.5f, 0.5f));
 		}
 	}
 	#endregion
 	#region Creep Management
-	public void CreepDied(){
+	public void CreepDied(EnemyAndEnemyAccessories e){
 		//GD.Print("DIED MaIN");
-		score += 1 * _WaveManager.GetWaveNumber();
+		score += e.score;
 		EmitSignal(SignalName.ScoreUpdated, score);
-		gold +=1;
+		gold += e.gold;
 		EmitSignal(SignalName.GoldUpdated, gold);
 			}
 	public void CreepReachedEnd(){
@@ -141,5 +151,12 @@ public partial class Main : Node2D
 
 	public void UpdateWave(int new_level){
 		EmitSignal(SignalName.WaveUpdated, new_level);
+	}
+
+	public void SpeedUp(){
+		SetTimeFactor(Mathf.Max(time_factor + 0.5f, 0.5f));
+	}
+	public void SlowDown(){
+		SetTimeFactor(Mathf.Max(time_factor - 0.5f, 0.5f));
 	}
 }

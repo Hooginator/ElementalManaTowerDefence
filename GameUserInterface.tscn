@@ -14,6 +14,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_kln6c")
 
 [node name="LivesText" type="RichTextLabel" parent="."]
@@ -124,3 +125,54 @@ offset_right = 792.0
 offset_bottom = 41.0
 text = "000000"
 script = ExtResource("1_3gjmf")
+
+[node name="SpeedText" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 89.0
+offset_top = 609.0
+offset_right = 161.0
+offset_bottom = 647.0
+text = "x Speed
+"
+
+[node name="SpeedCount" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 610.0
+offset_right = 147.0
+offset_bottom = 648.0
+text = "1"
+script = ExtResource("1_3gjmf")
+
+[node name="WaveTypeText" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 196.0
+offset_top = 607.0
+offset_right = 268.0
+offset_bottom = 645.0
+text = "Next : 
+"
+
+[node name="WaveTypeDetails" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 278.0
+offset_top = 606.0
+offset_right = 421.0
+offset_bottom = 644.0
+text = "Super Boss"
+script = ExtResource("1_3gjmf")
+
+[node name="SpeedUp" type="Button" parent="."]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 610.0
+offset_right = 24.0
+offset_bottom = 641.0
+text = "+"
+
+[node name="SlowDown" type="Button" parent="."]
+offset_left = 32.0
+offset_top = 611.0
+offset_right = 49.0
+offset_bottom = 642.0
+text = "-"
