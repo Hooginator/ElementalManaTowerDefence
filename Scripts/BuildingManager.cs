@@ -14,6 +14,8 @@ public partial class BuildingManager : Node2D
 	[Signal]
 	public delegate void SuccessfulBuildEventHandler();
 	[Signal]
+	public delegate void SuccessfulBuildContinueEventHandler();
+	[Signal]
 	public delegate void CancelBuildEventHandler();
 	[Signal]
 	public delegate void SelectBuildEventHandler(SpriteFrames s);
@@ -204,8 +206,8 @@ public partial class BuildingManager : Node2D
 				{	
 					// GD.Print("Click to build");
 					just_clicked = true;
+
 					BuildTower();
-					EmitSignal(SignalName.SuccessfulBuild);
 				}else{
 					EmitSignal(SignalName.FailedBuild);
 				}
@@ -246,8 +248,15 @@ public partial class BuildingManager : Node2D
 		tower.Initialize(tower_stats[_tower_index]);
 		GD.Print($"Buildi2222222222222222ng tower with {_tower_index}");
 
-		_tower_index = -1;
+		// Shift to keep  building
+		if(Input.IsActionPressed("ContinueBuilding")){
+			GD.Print("ZAQXSWCEDRVGBYBUH");
+					EmitSignal(SignalName.SuccessfulBuildContinue);
 
+		}else{
+		_tower_index = -1;
+					EmitSignal(SignalName.SuccessfulBuild);
+		}
 		// Don't double purchase
 		just_clicked = true;
 	}

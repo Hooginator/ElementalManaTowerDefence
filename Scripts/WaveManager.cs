@@ -55,17 +55,21 @@ public partial class WaveManager : Node2D
 
 	private async void EndWave(){
 		is_wave_happening = false;
+		int temp_wave_number = _wave_number;
 		// creep_remaining = 20;
 	await ToSignal(GetTree().CreateTimer(3.0f), SceneTreeTimer.SignalName.Timeout);
 		// want to wait until previous wave defeated
-		// StartWave();
+		if(is_wave_happening == false){ StartWave(temp_wave_number);}
 
 	}
 	public void Restart(){
 		UpdateWave( 0) ;
 		StartWave();
 	}
-	public void StartWave(){
+	public void StartWave(int n = -1){
+		if(n > -1 && _wave_number != n){
+			return;
+		}
 		is_wave_happening = true;
 		UpdateWave(_wave_number+1);
 		EmitSignal(SignalName.WaveStarted);

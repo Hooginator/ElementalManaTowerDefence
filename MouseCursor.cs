@@ -40,18 +40,18 @@ public partial class MouseCursor : AnimatedSprite2D
 	
 	public void BaseMouse(){
 		
-		if(frames_since_change > min_frames_since_change){
+		// if(frames_since_change > min_frames_since_change){
 		SpriteFrames = base_cursor;
 			frames_since_change = 0;
-		}
+		// }
 	}
 
 	public void TowerMouse(SpriteFrames s){
 		
-		if(frames_since_change > min_frames_since_change){
+		// if(frames_since_change > min_frames_since_change){
 			// previous  = SpriteFrames;
 		SpriteFrames = s;
 			frames_since_change = 0;
-		}
+		// }
 	}
 }

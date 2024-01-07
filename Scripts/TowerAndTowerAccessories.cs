@@ -63,16 +63,8 @@ public partial class TowerAndTowerAccessories : Node2D
 	public void SetTowerBaseSprite(SpriteFrames s){
 		_TowerBase.SpriteFrames = s;
 	}
-/*
-	public void CheckIfSelect(InputEvent @e){
-		GD.Print("CHECK IF SELECT");
-		if(@e is InputEventMouseButton i){
-			if(i.Pressed){
-				Select();
-			}
-		}
-	}
-	*/
+
+
 
 	public void Select(){
 		GD.Print($"SELECTED TOWER: D: {damage}");
