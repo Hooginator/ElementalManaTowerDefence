@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://ckpigbn3k6l42"]
+[gd_scene load_steps=7 format=3 uid="uid://ckpigbn3k6l42"]
 
-[ext_resource type="Script" path="res://LivesCount.cs" id="1_3gjmf"]
-[ext_resource type="Script" path="res://GameUserInterface.cs" id="1_kln6c"]
-[ext_resource type="Script" path="res://GameOverMenu.cs" id="3_0vbsp"]
-[ext_resource type="SpriteFrames" uid="uid://b0jyh7q4b4ur0" path="res://Images/MouseGood.tres" id="4_fjav3"]
-[ext_resource type="Script" path="res://MouseCursor.cs" id="5_8po58"]
+[ext_resource type="Script" path="res://Scripts/LivesCount.cs" id="1_3gjmf"]
+[ext_resource type="Script" path="res://Scripts/GameUserInterface.cs" id="1_kln6c"]
+[ext_resource type="Script" path="res://Scripts/GameOverMenu.cs" id="3_0vbsp"]
+[ext_resource type="SpriteFrames" uid="uid://b0jyh7q4b4ur0" path="res://Images/Mouse/MouseGood.tres" id="4_fjav3"]
+[ext_resource type="Script" path="res://Scripts/MouseCursor.cs" id="5_8po58"]
+[ext_resource type="SpriteFrames" uid="uid://ca2doj1e88tgh" path="res://Images/UserInterface/UpgradeBackground.tres" id="6_7bfl3"]
 
 [node name="GameUserInterface" type="Control"]
 z_index = 2000
@@ -12,6 +13,10 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 2.0
+offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -128,18 +133,18 @@ script = ExtResource("1_3gjmf")
 
 [node name="SpeedText" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = 89.0
+offset_left = 114.0
 offset_top = 609.0
-offset_right = 161.0
+offset_right = 187.0
 offset_bottom = 647.0
 text = "x Speed
 "
 
 [node name="SpeedCount" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = 64.0
+offset_left = 94.0
 offset_top = 610.0
-offset_right = 147.0
+offset_right = 159.0
 offset_bottom = 648.0
 text = "1"
 script = ExtResource("1_3gjmf")
@@ -164,16 +169,80 @@ script = ExtResource("1_3gjmf")
 
 [node name="SpeedUp" type="Button" parent="."]
 layout_mode = 0
-offset_left = 6.0
-offset_top = 610.0
-offset_right = 24.0
-offset_bottom = 641.0
+offset_left = 42.0
+offset_top = 609.0
+offset_right = 60.0
+offset_bottom = 640.0
 text = "+"
 
 [node name="SlowDown" type="Button" parent="."]
 layout_mode = 0
-offset_left = 32.0
-offset_top = 611.0
-offset_right = 49.0
-offset_bottom = 642.0
+offset_left = 68.0
+offset_top = 610.0
+offset_right = 85.0
+offset_bottom = 641.0
 text = "-"
+
+[node name="Selected" type="Control" parent="."]
+z_index = 1000
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="UpgradeBackground" type="AnimatedSprite2D" parent="Selected"]
+position = Vector2(1026, 596)
+sprite_frames = ExtResource("6_7bfl3")
+
+[node name="SelectedText" type="RichTextLabel" parent="Selected"]
+z_index = 1000
+layout_mode = 2
+offset_left = 928.0
+offset_top = 566.0
+offset_right = 1015.0
+offset_bottom = 604.0
+text = "Selected: 
+"
+
+[node name="SelectedDetails" type="RichTextLabel" parent="Selected"]
+z_index = 1000
+layout_mode = 2
+offset_left = 1026.0
+offset_top = 565.0
+offset_right = 1169.0
+offset_bottom = 603.0
+text = "Darkness 99"
+script = ExtResource("1_3gjmf")
+
+[node name="Sell" type="Button" parent="Selected"]
+z_index = 1000
+layout_mode = 0
+offset_left = 933.0
+offset_top = 602.0
+offset_right = 992.0
+offset_bottom = 633.0
+text = "SELL"
+
+[node name="Upgrade" type="Button" parent="Selected"]
+z_index = 1000
+layout_mode = 0
+offset_left = 1038.0
+offset_top = 601.0
+offset_right = 1129.0
+offset_bottom = 632.0
+text = "UPGRADE"
+
+[node name="HighScoreText" type="RichTextLabel" parent="."]
+offset_left = 451.0
+offset_top = 2.0
+offset_right = 551.0
+offset_bottom = 40.0
+text = "High Score
+"
+
+[node name="HighScoreCount" type="RichTextLabel" parent="."]
+offset_left = 564.0
+offset_top = 3.0
+offset_right = 647.0
+offset_bottom = 41.0
+text = "000000"
+script = ExtResource("1_3gjmf")

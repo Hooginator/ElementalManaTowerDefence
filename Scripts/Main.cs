@@ -16,6 +16,8 @@ public partial class Main : Node2D
 	[Signal]
 	public delegate void ScoreUpdatedEventHandler(int new_score);
 	[Signal]
+	public delegate void HighScoreUpdatedEventHandler(int new_score);
+	[Signal]
 	public delegate void GameOverEventHandler();
 	[Signal]
 	public delegate void TimeFactorUpdateEventHandler(float t);
@@ -23,6 +25,8 @@ public partial class Main : Node2D
 	public delegate void TimeFactorSpeedUpEventHandler();
 	[Signal]
 	public delegate void TimeFactorSlowDownEventHandler();
+	[Signal]
+	public delegate void NewHighScoreEventHandler(int s);
 
 	#endregion
 	#region Variables
@@ -30,12 +34,13 @@ public partial class Main : Node2D
 	BuildingManager _BuildingManager;
 	GameUserInterface _GameUserInterface;
 
-	const int starting_lives = 200;
+	const int starting_lives = 20;
 	const int starting_gold = 200;
 	
 	int lives = 0;
 	int gold = 0;
 	int score = 0;
+	int high_score = 0;
 
 	public float time_factor = 3f;
 	#endregion
@@ -86,6 +91,10 @@ public partial class Main : Node2D
 	}
 
 	public void LoseGame(){
+		if(high_score < score){
+			high_score = score;
+			EmitSignal(SignalName.NewHighScore, high_score);
+		}
 		SetTimeFactor(0f);
 		gold = 0;
 		EmitSignal(SignalName.GameOver);
@@ -123,6 +132,11 @@ public partial class Main : Node2D
 	public void CreepDied(EnemyAndEnemyAccessories e){
 		//GD.Print("DIED MaIN");
 		score += e.score;
+		if(high_score < score){
+			// high_score = score;// not yet
+			EmitSignal(SignalName.HighScoreUpdated, score);
+
+		}
 		EmitSignal(SignalName.ScoreUpdated, score);
 		gold += e.gold;
 		EmitSignal(SignalName.GoldUpdated, gold);
@@ -134,7 +148,7 @@ public partial class Main : Node2D
 		if(lives <= 0){
 			LoseGame();
 		}
-			}
+	}
 	#endregion
 	#region Gold Management
 	public int GetGold(){
@@ -159,4 +173,22 @@ public partial class Main : Node2D
 	public void SlowDown(){
 		SetTimeFactor(Mathf.Max(time_factor - 0.5f, 0.5f));
 	}
+
+	public void SellTower(TowerAndTowerAccessories t){
+		gold += t.GetSaleAmount();
+		EmitSignal(SignalName.GoldUpdated, gold);
+		t.Sell();
+	}
+
+	public void UpgradeTower(TowerAndTowerAccessories t)
+	{
+		int cost = t.GetUpgradeAmount();
+		if(cost <= gold){
+			gold -= cost;
+		EmitSignal(SignalName.GoldUpdated, gold);
+			t.LevelUp();
+		}
+	}
+
+
 }

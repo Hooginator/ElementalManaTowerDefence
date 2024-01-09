@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://bfv1ttqerbb4s"]
+
+[ext_resource type="Texture2D" uid="uid://blyybyf6538at" path="res://GimpStuff/V1 Tower/CentralOrb.png" id="1_p85kg"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_p85kg")
+}],
+"loop": true,
+"name": &"CentralOrb",
+"speed": 5.0
+}]

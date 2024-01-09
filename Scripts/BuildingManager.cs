@@ -18,30 +18,37 @@ public partial class BuildingManager : Node2D
 	[Signal]
 	public delegate void CancelBuildEventHandler();
 	[Signal]
+	public delegate void DeselectTowerEventHandler();
+	[Signal]
 	public delegate void SelectBuildEventHandler(SpriteFrames s);
 	// Tower resources
 	public List<PackedScene> _towers = new List<PackedScene>();
 	List<TowerAndTowerAccessories> TowerAndTowerAccessoriesList = new List<TowerAndTowerAccessories>();
 	List<TowerDetails> initial_towers = new List<TowerDetails>(){
 		{new TowerDetails(200, 400, 0)},
-		{new TowerDetails(1000, 600, 2)}
+		{new TowerDetails(1000, 200, 2)}
 	};
 	// Tower parameters
 	List<int> costs = new List<int>(){  };
 	private int _default_cost = 20;
 	private float tower_size = 100f;
 	List<SpriteFrames> tower_bases = new List<SpriteFrames>();
+	List<SpriteFrames> tower_orbs = new List<SpriteFrames>();
+	List<SpriteFrames> tower_previews = new List<SpriteFrames>();
 	List<TowerAndTowerAccessories.stats> tower_stats = new List<TowerAndTowerAccessories.stats>()
 	{
 		// Basic
 		{new TowerAndTowerAccessories.stats(
-			_rotation_speed: 2f, _range: 500f, _damage: 3f, _attack_rate: 1f, _cost: 10, _projectile_speed: 2f, _projectile_lifetime: 400f)},
+			_rotation_speed: 2f, _range: 500f, _damage: 3f, _attack_rate: 1f, _cost: 10
+			, _projectile_speed: 2f, _projectile_lifetime: 400f, _element: Element.Fire)},
 		//  Rapid Fire
 		{new TowerAndTowerAccessories.stats(
-			_rotation_speed: 8f, _range: 400f, _damage: 1f, _attack_rate: 4f, _cost: 10, _projectile_speed: 4f, _projectile_lifetime: 200f)},
+			_rotation_speed: 8f, _range: 400f, _damage: 1f, _attack_rate: 4f, _cost: 10
+			, _projectile_speed: 4f, _projectile_lifetime: 200f, _element: Element.Ice)},
 		// Sniper
 		{new TowerAndTowerAccessories.stats(
-			_rotation_speed: 1f, _range: 1000f, _damage: 10f, _attack_rate: 0.4f, _cost: 10, _projectile_speed: 16f, _projectile_lifetime: 1000f)}
+			_rotation_speed: 1f, _range: 1000f, _damage: 10f, _attack_rate: 0.4f, _cost: 10
+			, _projectile_speed: 16f, _projectile_lifetime: 1000f, _element: Element.Light)}
 		
 		
 	};
@@ -58,6 +65,11 @@ public partial class BuildingManager : Node2D
 	private Main _root;
 	private Vector2 building_pos = new Vector2(0,0);
 	private EnemyPath _EnemyPath;
+
+	private Vector2 UI_LIMITS_X = new Vector2(850, 1150);
+	private Vector2 UI_LIMITS_Y = new Vector2(500, 650);
+	
+	private GameUserInterface _GameUserInterface;
 	// To get from elsehwewre later
 		private List<Vector2> waypoints = new List<Vector2>(){new Vector2(0, 0), new Vector2(300, 300), new Vector2(300, 600), new Vector2(600, 600), new Vector2(600, 300), new Vector2(900,300), new Vector2(1200,300)};
 
@@ -83,10 +95,22 @@ public partial class BuildingManager : Node2D
 		_EnemyPath = GetParent().GetNode<EnemyPath>("EnemyPath");
 		_towers.Add( GD.Load<PackedScene>("res://Tower.tscn"));
 
-		tower_bases.Add(GD.Load<SpriteFrames>("res://Images/Tower1Sprite.tres"));
-		tower_bases.Add(GD.Load<SpriteFrames>("res://Images/Tower2Sprite.tres"));
-		tower_bases.Add(GD.Load<SpriteFrames>("res://Images/Tower3Sprite.tres"));
+		_GameUserInterface = GetParent().GetNode<GameUserInterface>("GameUserInterface");
+
+		tower_bases.Add(GD.Load<SpriteFrames>("res://Images/Tower/FireBase.tres"));
+		tower_bases.Add(GD.Load<SpriteFrames>("res://Images/Tower/IceBase.tres"));
+		tower_bases.Add(GD.Load<SpriteFrames>("res://Images/Tower/LightBase.tres"));
+
+		
+		tower_orbs.Add(GD.Load<SpriteFrames>("res://Images/Tower/FireOrb.tres"));
+		tower_orbs.Add(GD.Load<SpriteFrames>("res://Images/Tower/IceOrb.tres"));
+		tower_orbs.Add(GD.Load<SpriteFrames>("res://Images/Tower/LightOrb.tres"));
 		// _towers.Add( GD.Load<PackedScene>("res://Towers/Tower2.tscn"));
+
+		
+		tower_previews.Add(GD.Load<SpriteFrames>("res://Images/Tower/FirePreview.tres"));
+		tower_previews.Add(GD.Load<SpriteFrames>("res://Images/Tower/IcePreview.tres"));
+		tower_previews.Add(GD.Load<SpriteFrames>("res://Images/Tower/LightPreview.tres"));
 
 		int i = 0;
 		foreach (var t in _towers){
@@ -142,15 +166,15 @@ public partial class BuildingManager : Node2D
 		// Select Tower
 		if (Input.IsActionPressed("SelectBuild1")){
 			_tower_index = 0;
-			EmitSignal(SignalName.SelectBuild, tower_bases[_tower_index]);
+			EmitSignal(SignalName.SelectBuild, tower_previews[_tower_index]);
 		}
 		if (Input.IsActionPressed("SelectBuild2")){
 			_tower_index = 1;
-			EmitSignal(SignalName.SelectBuild, tower_bases[_tower_index]);
+			EmitSignal(SignalName.SelectBuild, tower_previews[_tower_index]);
 		}
 		if (Input.IsActionPressed("SelectBuild3")){
 			_tower_index = 2;
-			EmitSignal(SignalName.SelectBuild, tower_bases[_tower_index]);
+			EmitSignal(SignalName.SelectBuild, tower_previews[_tower_index]);
 		}
 		
 		if (Input.IsActionPressed("Cancel")){
@@ -158,14 +182,22 @@ public partial class BuildingManager : Node2D
 			EmitSignal(SignalName.CancelBuild);
 		}
 
+
+
+
 		
 		 if (Input.IsActionPressed("Confirm1") )
 		{
 
+			Vector2 selection_pos = GetViewport().GetMousePosition();
+		if(ClickedInsideUI(selection_pos)){
+			// Don't build in the UI box for upgrades
+			return;
+		}
+		// Select Tower Maybe
 		if(_tower_index < 0){
 			// Nothing selected to build,  select tower maybe
 			
-			Vector2 selection_pos = GetViewport().GetMousePosition();
 			// select tower :/
 				foreach(var t in tower_list){
 					var diff_vec = t.Position - selection_pos;
@@ -174,6 +206,7 @@ public partial class BuildingManager : Node2D
 						// GD.Print("Too Close To roqwer");
 						break;
 					}
+					EmitSignal(SignalName.DeselectTower);
 				}
 
 			return;
@@ -181,7 +214,7 @@ public partial class BuildingManager : Node2D
 
 			if(_root.GetGold() >= costs[0]){
 				bool too_close = false;
-				building_pos = GetViewport().GetMousePosition();
+				building_pos = selection_pos;
 				// GD.Print($"Build POS:  {building_pos}");
 				foreach(var t in tower_list){
 					var diff_vec = t.Position - building_pos;
@@ -244,7 +277,7 @@ public partial class BuildingManager : Node2D
 		tower.SetTimeFactor(_root.time_factor);
 
 		GD.Print($"Building tower with {_tower_index}");
-		tower.SetTowerBaseSprite(tower_bases[_tower_index]);
+		tower.SetTowerBaseSprite(tower_bases[_tower_index], tower_orbs[_tower_index]);
 		tower.Initialize(tower_stats[_tower_index]);
 		GD.Print($"Buildi2222222222222222ng tower with {_tower_index}");
 
@@ -267,8 +300,14 @@ public partial class BuildingManager : Node2D
 			// Link tower to time
 			GetParent<Main>().TimeFactorUpdate += (float t) => tw.SetTimeFactor(t);
 
+			tw.TowerSelected += (TowerAndTowerAccessories t) => _GameUserInterface.SetSelectedTower(t);
+			tw.Sold += (TowerAndTowerAccessories t) => RemoveTower(t);
 			// Tower monitoring list
 			tower_list.Add(tw);
+	}
+
+	public void RemoveTower(TowerAndTowerAccessories t){
+		tower_list.Remove(t);
 	}
 	
 	public void DestroyAll(){
@@ -280,6 +319,14 @@ public partial class BuildingManager : Node2D
 		tower_list.Clear();
 	}
 	#endregion
+
+	private bool ClickedInsideUI(Vector2 pos){
+		if(UI_LIMITS_X[0] < pos[0] && UI_LIMITS_X[1] >= pos[0]
+		&& UI_LIMITS_Y[0] < pos[1] && UI_LIMITS_Y[1] >=pos[1]){
+			return true;
+		}
+		return false;
+	}
 
 	public struct TowerDetails{
 		public int type;

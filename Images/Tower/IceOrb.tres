@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://cyrge1nj81qtj"]
+
+[ext_resource type="Texture2D" uid="uid://b2g4f5lsiyxyq" path="res://GimpStuff/V1 Tower/CentralOrb_Ice.png" id="1_ibmsy"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ibmsy")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

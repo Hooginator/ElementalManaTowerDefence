@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://ckpigbn3k6l42" path="res://GameUserInterface.tscn" id="5_o5lbt"]
 [ext_resource type="Script" path="res://Scripts/BuildingManager.cs" id="5_ujom6"]
 [ext_resource type="PackedScene" uid="uid://dr7trf43s5pud" path="res://EnemyPath.tscn" id="6_omduu"]
-[ext_resource type="Script" path="res://EnemyPath.cs" id="7_hd5dj"]
+[ext_resource type="Script" path="res://Scripts/EnemyPath.cs" id="7_hd5dj"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_4llic")

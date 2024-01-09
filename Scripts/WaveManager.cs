@@ -26,9 +26,9 @@ public partial class WaveManager : Node2D
 		_Main.TimeFactorUpdate += (float t) => SetTimeFactor(t);
 		
 		
-		enemy_bases.Add(GD.Load<SpriteFrames>("res://Images/Enemy.tres"));
-		enemy_bases.Add(GD.Load<SpriteFrames>("res://Images/SmallEnemy.tres"));
-		enemy_bases.Add(GD.Load<SpriteFrames>("res://Images/BigEnemy.tres"));
+		enemy_bases.Add(GD.Load<SpriteFrames>("res://Images/Enemy/Enemy.tres"));
+		enemy_bases.Add(GD.Load<SpriteFrames>("res://Images/Enemy/SmallEnemy.tres"));
+		enemy_bases.Add(GD.Load<SpriteFrames>("res://Images/Enemy/BigEnemy.tres"));
 	}
 	float i=0f;
 	int spawn_rate= 150;

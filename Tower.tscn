@@ -1,22 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://bkyc8vouh3s4n"]
+[gd_scene load_steps=10 format=3 uid="uid://bkyc8vouh3s4n"]
 
 [ext_resource type="Script" path="res://Scripts/Tower.cs" id="1_4nnsm"]
 [ext_resource type="Script" path="res://Scripts/TowerAndTowerAccessories.cs" id="1_8prc8"]
-[ext_resource type="SpriteFrames" uid="uid://dkf2qm8b8tun3" path="res://Images/Tower1Sprite.tres" id="3_j7dsp"]
-[ext_resource type="Texture2D" uid="uid://rydluykm07ws" path="res://Images/Gun1.png" id="4_kil0o"]
-[ext_resource type="Script" path="res://TowerBase.cs" id="4_oqwdv"]
+[ext_resource type="SpriteFrames" uid="uid://cgy8jd7vj81ms" path="res://Images/Tower/Base.tres" id="3_i4g6o"]
+[ext_resource type="Script" path="res://Scripts/TowerBase.cs" id="4_oqwdv"]
+[ext_resource type="SpriteFrames" uid="uid://brqav3pukbiiu" path="res://Images/Tower/LightBase.tres" id="5_bm2ya"]
 [ext_resource type="Script" path="res://Scripts/TowerAnimation.cs" id="5_esk7r"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_g7y3r"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("4_kil0o")
-}],
-"loop": true,
-"name": &"Gun",
-"speed": 5.0
-}]
+[ext_resource type="Script" path="res://Scripts/CentralOrb.cs" id="6_ijrsf"]
+[ext_resource type="SpriteFrames" uid="uid://bfv1ttqerbb4s" path="res://Images/Tower/CentralOrb.tres" id="7_tn25u"]
+[ext_resource type="SpriteFrames" uid="uid://c54yan381024q" path="res://Images/Tower/LightOrb.tres" id="9_5pdnu"]
 
 [node name="TowerAndTowerAccessories" type="AnimatedSprite2D"]
 script = ExtResource("1_8prc8")
@@ -25,17 +17,34 @@ script = ExtResource("1_8prc8")
 script = ExtResource("1_4nnsm")
 metadata/_edit_group_ = true
 
-[node name="TowerBase" type="AnimatedSprite2D" parent="Tower"]
+[node name="Base" type="Node2D" parent="Tower"]
+
+[node name="TowerBase" type="AnimatedSprite2D" parent="Tower/Base"]
 z_index = 1
 scale = Vector2(0.295, 0.295)
-sprite_frames = ExtResource("3_j7dsp")
+sprite_frames = ExtResource("3_i4g6o")
 script = ExtResource("4_oqwdv")
 
-[node name="TowerAnimation" type="AnimatedSprite2D" parent="Tower"]
+[node name="ElementalBase" type="AnimatedSprite2D" parent="Tower/Base"]
+z_index = 1
+scale = Vector2(0.295, 0.295)
+sprite_frames = ExtResource("5_bm2ya")
+script = ExtResource("4_oqwdv")
+
+[node name="CentralOrb" type="Node2D" parent="Tower"]
+script = ExtResource("6_ijrsf")
+
+[node name="Orb" type="AnimatedSprite2D" parent="Tower/CentralOrb"]
 z_index = 10
 scale = Vector2(0.306, 0.3)
-sprite_frames = SubResource("SpriteFrames_g7y3r")
-animation = &"Gun"
+sprite_frames = ExtResource("7_tn25u")
+animation = &"CentralOrb"
 script = ExtResource("5_esk7r")
 
-[connection signal="TargetChanged" from="Tower" to="Tower/TowerAnimation" method="_on_tower_target_changed"]
+[node name="ElementalOrb" type="AnimatedSprite2D" parent="Tower/CentralOrb"]
+z_index = 10
+scale = Vector2(0.306, 0.3)
+sprite_frames = ExtResource("9_5pdnu")
+script = ExtResource("5_esk7r")
+
+[connection signal="TargetChanged" from="Tower" to="Tower/CentralOrb/Orb" method="_on_tower_target_changed"]

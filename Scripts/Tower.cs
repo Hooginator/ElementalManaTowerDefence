@@ -12,7 +12,7 @@ public partial class Tower : Area2D
 	private TowerAndTowerAccessories _root;
 
 	private Main _Main;
-	private TowerAnimation _animations;
+	private Node2D _CentralOrb;
 
 	public Vector2 _target = new Vector2(0, 0);
 	
@@ -21,6 +21,7 @@ public partial class Tower : Area2D
 	int i = 0;
 	private float _rotationTarget = 1;
 	private float _rotationDirection = 0;
+	private float _current_angle = 0f;
 
 	#endregion
 	#region Initialization
@@ -28,7 +29,7 @@ public partial class Tower : Area2D
 	public override void _Ready()
 	{
 		_root = GetParent<TowerAndTowerAccessories>();
-		_animations = GetNode<TowerAnimation>("TowerAnimation");
+		_CentralOrb = GetNode<Node2D>("CentralOrb");
 		boolet = GD.Load<PackedScene>("res://Projectile.tscn");
 		_Main = GetNode<Main>("/root/Main");
 	}
@@ -51,7 +52,10 @@ public partial class Tower : Area2D
 		}
 		
 		// Rotatte tower
-		_animations.Rotation += _rotationDirection * Mathf.Min(_root.rotation_speed * _root.time_factor * (float)delta, Mathf.Abs(_animations.Rotation - _rotationTarget));
+		// No more rotate... for now
+		_current_angle += _rotationDirection * 
+			Mathf.Min(_root.rotation_speed * _root.time_factor * (float)delta, 
+			Mathf.Abs(_current_angle - _rotationTarget));
 
 
 		// Fire a projectile
@@ -63,7 +67,7 @@ public partial class Tower : Area2D
 			// Initialize projectile
 			var projectile2 = projectile.GetNode<Projectile>(".");
 			projectile2.Position = new Vector2(0,0);
-			projectile2.SetDirection(new Vector2(Mathf.Sin(_animations.Rotation), -Mathf.Cos(_animations.Rotation)));
+			projectile2.SetDirection(new Vector2(Mathf.Sin(_current_angle), -Mathf.Cos(_current_angle)));
 			projectile2.Initialize(lifetime: (int)_root.projectile_lifetime, speed: _root.projectile_speed, damage: (int)_root.damage);
 
 			// Manage time
@@ -84,7 +88,7 @@ public partial class Tower : Area2D
 		// Find Angle
 		v =  Tools.SetLengthVector2(v- _root.Position);
 		var angle = Tools.GetAngleFromVector2(v);
-		SetRotationDirection(angle, _animations.Rotation);
+		SetRotationDirection(angle, _current_angle);
 		SetRotationTarget(angle);
 
 		// Tell the worls we switched targets

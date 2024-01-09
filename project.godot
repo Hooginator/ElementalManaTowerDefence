@@ -14,7 +14,7 @@ config/name="Elemental Tower Defence"
 run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.2", "C#", "Mobile")
 run/max_fps=60
-config/icon="res://Images/icon.svg"
+config/icon="res://Images/Projectile/icon.svg"
 
 [debug]
 
